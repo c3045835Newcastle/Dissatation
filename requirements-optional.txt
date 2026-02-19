@@ -1,0 +1,5 @@
+# Optional dependencies for memory optimization
+# Install these if you want to use 4-bit or 8-bit quantization to reduce memory usage
+
+bitsandbytes>=0.41.0  # For 4-bit and 8-bit quantization
+scipy>=1.10.0         # Required by bitsandbytes
