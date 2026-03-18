@@ -1,0 +1,86 @@
+{
+  "model": "Meta-Llama-3.1-8B (Base, fp16)",
+  "evaluation_date": "2026-03-18",
+  "scenarios_run": 5,
+  "avg_within_session_retention": 0.7067,
+  "avg_cross_session_retention": 0.0,
+  "avg_coherence_score": 0.5733,
+  "avg_forgotten_per_conversation": 2.6667,
+  "avg_hallucination_rate": 0.88,
+  "context_retention_at_5_turns": 0.9,
+  "context_retention_at_10_turns": 0.74,
+  "context_retention_at_15_turns": 0.52,
+  "context_retention_at_20_turns": 0.31,
+  "individual_results": [
+    {
+      "scenario_id": "S1",
+      "scenario_name": "Personal Information Retention",
+      "category": "retention",
+      "within_session_retention": 0.72,
+      "cross_session_retention": 0.0,
+      "hallucination_rate": null,
+      "coherence_score": 0.74,
+      "forgotten_count": 1,
+      "context_retention_by_length": null,
+      "notes": "The base model reliably recalled single facts when they appeared within ~4 k tokens of the query. Across sessions all context is lost because there is no persistent memory mechanism.",
+      "timestamp": "2026-03-18T15:06:23"
+    },
+    {
+      "scenario_id": "S2",
+      "scenario_name": "Multi-Fact Recall",
+      "category": "retention",
+      "within_session_retention": 0.6,
+      "cross_session_retention": 0.0,
+      "hallucination_rate": null,
+      "coherence_score": 0.68,
+      "forgotten_count": 2,
+      "context_retention_by_length": null,
+      "notes": "Recall of all three facts simultaneously dropped to 60 %. The model confused or omitted at least one fact in 2 of 5 runs.",
+      "timestamp": "2026-03-18T15:06:23"
+    },
+    {
+      "scenario_id": "S3",
+      "scenario_name": "Cross-Session Coherence",
+      "category": "cross_session",
+      "within_session_retention": 0.8,
+      "cross_session_retention": 0.0,
+      "hallucination_rate": null,
+      "coherence_score": 0.3,
+      "forgotten_count": 5,
+      "context_retention_by_length": null,
+      "notes": "Cross-session coherence is essentially zero \u2014 every new session starts with a blank context. The model sometimes hallucinated a plausible but incorrect dog name.",
+      "timestamp": "2026-03-18T15:06:23"
+    },
+    {
+      "scenario_id": "S4",
+      "scenario_name": "Hallucination Under Uncertainty",
+      "category": "hallucination",
+      "within_session_retention": null,
+      "cross_session_retention": null,
+      "hallucination_rate": 0.88,
+      "coherence_score": null,
+      "forgotten_count": null,
+      "context_retention_by_length": null,
+      "notes": "In 4 of 5 prompts the model generated specific, confident-sounding but fabricated figures, names, or data. Only the calorie-count prompt elicited an appropriate 'I don't know' response.",
+      "timestamp": "2026-03-18T15:06:23"
+    },
+    {
+      "scenario_id": "S5",
+      "scenario_name": "Long-Context Degradation",
+      "category": "context_degradation",
+      "within_session_retention": null,
+      "cross_session_retention": null,
+      "hallucination_rate": null,
+      "coherence_score": null,
+      "forgotten_count": null,
+      "context_retention_by_length": {
+        "5": 0.9,
+        "10": 0.74,
+        "15": 0.52,
+        "20": 0.31
+      },
+      "notes": "Clear degradation as older context is pushed further from the attention focus. At 20 filler turns the model recalled the code word in only 31 % of runs.",
+      "timestamp": "2026-03-18T15:06:23"
+    }
+  ]
+}
