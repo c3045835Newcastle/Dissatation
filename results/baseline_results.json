@@ -1,0 +1,1817 @@
+{
+  "metadata": {
+    "system": "Baseline \u2013 LLaMA 3.1 8B (context-window only)",
+    "author": "Robin Husbands, 230458358",
+    "university": "Newcastle University",
+    "module": "CSC3094 Dissertation",
+    "evaluation_date": "2026-03-18",
+    "num_scenarios": 5
+  },
+  "scenarios": [
+    {
+      "scenario_id": 1,
+      "scenario_name": "Cross-Session Amnesia",
+      "scenario_desc": "Facts introduced in Session 1 are probed at the start of Session 2.  A context-window-only system has no way to persist information across session boundaries.",
+      "num_sessions": 2,
+      "num_facts": 5,
+      "probe_results": [
+        {
+          "fact_key": "name",
+          "fact_value": "Robin",
+          "response": "I believe name is Alex.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 1,
+          "session": 1,
+          "phase_label": "session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "age",
+          "fact_value": "22",
+          "response": "I'm sorry, I don't have any record of age in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 2,
+          "session": 1,
+          "phase_label": "session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "university",
+          "fact_value": "Newcastle University",
+          "response": "I'm sorry, I don't have any record of university in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 3,
+          "session": 1,
+          "phase_label": "session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "favourite colour",
+          "fact_value": "orange",
+          "response": "I believe favourite colour is purple.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 4,
+          "session": 1,
+          "phase_label": "session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "pet",
+          "fact_value": "a cat",
+          "response": "I believe pet is a dog.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 5,
+          "session": 1,
+          "phase_label": "session-2",
+          "cross_session": true
+        }
+      ],
+      "labelled_probes": {
+        "session-2": [
+          {
+            "fact_key": "name",
+            "fact_value": "Robin",
+            "response": "I believe name is Alex.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 1,
+            "session": 1,
+            "phase_label": "session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "age",
+            "fact_value": "22",
+            "response": "I'm sorry, I don't have any record of age in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 2,
+            "session": 1,
+            "phase_label": "session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "university",
+            "fact_value": "Newcastle University",
+            "response": "I'm sorry, I don't have any record of university in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 3,
+            "session": 1,
+            "phase_label": "session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "favourite colour",
+            "fact_value": "orange",
+            "response": "I believe favourite colour is purple.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 4,
+            "session": 1,
+            "phase_label": "session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "pet",
+            "fact_value": "a cat",
+            "response": "I believe pet is a dog.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 5,
+            "session": 1,
+            "phase_label": "session-2",
+            "cross_session": true
+          }
+        ]
+      },
+      "metrics": {
+        "total_probes": 5,
+        "correct": 0,
+        "forgotten": 2,
+        "hallucinations": 3,
+        "retention_accuracy": 0.0,
+        "forgotten_rate": 0.4,
+        "hallucination_rate": 0.6,
+        "coherence_score": 0.0,
+        "cross_session_retention": 0.0,
+        "within_session_retention": null,
+        "retention_accuracy_ci_95": [
+          0.0,
+          0.4345
+        ],
+        "hallucination_rate_ci_95": [
+          0.2307,
+          0.8824
+        ]
+      },
+      "decay_curve": [],
+      "context_tokens_used": 117,
+      "context_limit": 4096
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "Context Window Overflow",
+      "scenario_desc": "Facts are introduced at the beginning of a long single session.  Many filler turns push the early facts beyond the context window limit.  Early facts should be forgotten; recent facts may survive.",
+      "num_sessions": 1,
+      "num_facts": 7,
+      "probe_results": [
+        {
+          "fact_key": "name",
+          "fact_value": "Jordan",
+          "response": "I'm sorry, I don't have any record of name in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 38,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        },
+        {
+          "fact_key": "job",
+          "fact_value": "software engineer",
+          "response": "I'm sorry, I don't have any record of job in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 39,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        },
+        {
+          "fact_key": "city",
+          "fact_value": "Newcastle",
+          "response": "I believe city is Leeds.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 40,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        },
+        {
+          "fact_key": "hobby",
+          "fact_value": "playing guitar",
+          "response": "From what I recall, hobby is ratiug gniyalp.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 41,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        },
+        {
+          "fact_key": "favourite food",
+          "fact_value": "pizza",
+          "response": "From what I recall, favourite food is azzip.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 42,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        },
+        {
+          "fact_key": "siblings",
+          "fact_value": "two brothers",
+          "response": "From what I recall, siblings is srehtorb owt.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 43,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        },
+        {
+          "fact_key": "car",
+          "fact_value": "a blue Honda Civic",
+          "response": "I'm sorry, I don't have any record of car in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 44,
+          "session": 0,
+          "phase_label": "session-1",
+          "cross_session": false
+        }
+      ],
+      "labelled_probes": {
+        "session-1": [
+          {
+            "fact_key": "name",
+            "fact_value": "Jordan",
+            "response": "I'm sorry, I don't have any record of name in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 38,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          },
+          {
+            "fact_key": "job",
+            "fact_value": "software engineer",
+            "response": "I'm sorry, I don't have any record of job in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 39,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          },
+          {
+            "fact_key": "city",
+            "fact_value": "Newcastle",
+            "response": "I believe city is Leeds.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 40,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          },
+          {
+            "fact_key": "hobby",
+            "fact_value": "playing guitar",
+            "response": "From what I recall, hobby is ratiug gniyalp.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 41,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          },
+          {
+            "fact_key": "favourite food",
+            "fact_value": "pizza",
+            "response": "From what I recall, favourite food is azzip.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 42,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          },
+          {
+            "fact_key": "siblings",
+            "fact_value": "two brothers",
+            "response": "From what I recall, siblings is srehtorb owt.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 43,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          },
+          {
+            "fact_key": "car",
+            "fact_value": "a blue Honda Civic",
+            "response": "I'm sorry, I don't have any record of car in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 44,
+            "session": 0,
+            "phase_label": "session-1",
+            "cross_session": false
+          }
+        ]
+      },
+      "metrics": {
+        "total_probes": 7,
+        "correct": 0,
+        "forgotten": 3,
+        "hallucinations": 4,
+        "retention_accuracy": 0.0,
+        "forgotten_rate": 0.4286,
+        "hallucination_rate": 0.5714,
+        "coherence_score": 0.0,
+        "cross_session_retention": null,
+        "within_session_retention": 0.0,
+        "retention_accuracy_ci_95": [
+          0.0,
+          0.3543
+        ],
+        "hallucination_rate_ci_95": [
+          0.2504,
+          0.8418
+        ]
+      },
+      "decay_curve": [],
+      "context_tokens_used": 3984,
+      "context_limit": 4096
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "Multi-Session Coherence",
+      "scenario_desc": "The same facts are probed at the end of the session they were introduced in (expected: good recall) and again at the start of two subsequent sessions (expected: poor recall).",
+      "num_sessions": 3,
+      "num_facts": 4,
+      "probe_results": [
+        {
+          "fact_key": "name",
+          "fact_value": "Alex",
+          "response": "Based on our conversation, name is Alex.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 5,
+          "session": 0,
+          "phase_label": "within-session",
+          "cross_session": false
+        },
+        {
+          "fact_key": "project topic",
+          "fact_value": "memory architectures for LLMs",
+          "response": "Based on our conversation, project topic is memory architectures for LLMs.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 6,
+          "session": 0,
+          "phase_label": "within-session",
+          "cross_session": false
+        },
+        {
+          "fact_key": "supervisor",
+          "fact_value": "Dr Smith",
+          "response": "Based on our conversation, supervisor is Dr Smith.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 7,
+          "session": 0,
+          "phase_label": "within-session",
+          "cross_session": false
+        },
+        {
+          "fact_key": "submission date",
+          "fact_value": "May 2025",
+          "response": "Based on our conversation, submission date is May 2025.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 8,
+          "session": 0,
+          "phase_label": "within-session",
+          "cross_session": false
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Alex",
+          "response": "I believe name is Morgan.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 1,
+          "session": 1,
+          "phase_label": "cross-session-1",
+          "cross_session": true
+        },
+        {
+          "fact_key": "project topic",
+          "fact_value": "memory architectures for LLMs",
+          "response": "From what I recall, project topic is sMLL rof serutcetihcra yromem.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 2,
+          "session": 1,
+          "phase_label": "cross-session-1",
+          "cross_session": true
+        },
+        {
+          "fact_key": "supervisor",
+          "fact_value": "Dr Smith",
+          "response": "From what I recall, supervisor is htimS rD.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 3,
+          "session": 1,
+          "phase_label": "cross-session-1",
+          "cross_session": true
+        },
+        {
+          "fact_key": "submission date",
+          "fact_value": "May 2025",
+          "response": "From what I recall, submission date is 5202 yaM.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 4,
+          "session": 1,
+          "phase_label": "cross-session-1",
+          "cross_session": true
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Alex",
+          "response": "I'm sorry, I don't have any record of name in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 1,
+          "session": 2,
+          "phase_label": "cross-session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "project topic",
+          "fact_value": "memory architectures for LLMs",
+          "response": "I'm sorry, I don't have any record of project topic in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 2,
+          "session": 2,
+          "phase_label": "cross-session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "supervisor",
+          "fact_value": "Dr Smith",
+          "response": "I'm sorry, I don't have any record of supervisor in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 3,
+          "session": 2,
+          "phase_label": "cross-session-2",
+          "cross_session": true
+        },
+        {
+          "fact_key": "submission date",
+          "fact_value": "May 2025",
+          "response": "I'm sorry, I don't have any record of submission date in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 4,
+          "session": 2,
+          "phase_label": "cross-session-2",
+          "cross_session": true
+        }
+      ],
+      "labelled_probes": {
+        "within-session": [
+          {
+            "fact_key": "name",
+            "fact_value": "Alex",
+            "response": "Based on our conversation, name is Alex.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 5,
+            "session": 0,
+            "phase_label": "within-session",
+            "cross_session": false
+          },
+          {
+            "fact_key": "project topic",
+            "fact_value": "memory architectures for LLMs",
+            "response": "Based on our conversation, project topic is memory architectures for LLMs.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 6,
+            "session": 0,
+            "phase_label": "within-session",
+            "cross_session": false
+          },
+          {
+            "fact_key": "supervisor",
+            "fact_value": "Dr Smith",
+            "response": "Based on our conversation, supervisor is Dr Smith.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 7,
+            "session": 0,
+            "phase_label": "within-session",
+            "cross_session": false
+          },
+          {
+            "fact_key": "submission date",
+            "fact_value": "May 2025",
+            "response": "Based on our conversation, submission date is May 2025.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 8,
+            "session": 0,
+            "phase_label": "within-session",
+            "cross_session": false
+          }
+        ],
+        "cross-session-1": [
+          {
+            "fact_key": "name",
+            "fact_value": "Alex",
+            "response": "I believe name is Morgan.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 1,
+            "session": 1,
+            "phase_label": "cross-session-1",
+            "cross_session": true
+          },
+          {
+            "fact_key": "project topic",
+            "fact_value": "memory architectures for LLMs",
+            "response": "From what I recall, project topic is sMLL rof serutcetihcra yromem.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 2,
+            "session": 1,
+            "phase_label": "cross-session-1",
+            "cross_session": true
+          },
+          {
+            "fact_key": "supervisor",
+            "fact_value": "Dr Smith",
+            "response": "From what I recall, supervisor is htimS rD.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 3,
+            "session": 1,
+            "phase_label": "cross-session-1",
+            "cross_session": true
+          },
+          {
+            "fact_key": "submission date",
+            "fact_value": "May 2025",
+            "response": "From what I recall, submission date is 5202 yaM.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 4,
+            "session": 1,
+            "phase_label": "cross-session-1",
+            "cross_session": true
+          }
+        ],
+        "cross-session-2": [
+          {
+            "fact_key": "name",
+            "fact_value": "Alex",
+            "response": "I'm sorry, I don't have any record of name in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 1,
+            "session": 2,
+            "phase_label": "cross-session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "project topic",
+            "fact_value": "memory architectures for LLMs",
+            "response": "I'm sorry, I don't have any record of project topic in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 2,
+            "session": 2,
+            "phase_label": "cross-session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "supervisor",
+            "fact_value": "Dr Smith",
+            "response": "I'm sorry, I don't have any record of supervisor in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 3,
+            "session": 2,
+            "phase_label": "cross-session-2",
+            "cross_session": true
+          },
+          {
+            "fact_key": "submission date",
+            "fact_value": "May 2025",
+            "response": "I'm sorry, I don't have any record of submission date in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 4,
+            "session": 2,
+            "phase_label": "cross-session-2",
+            "cross_session": true
+          }
+        ]
+      },
+      "metrics": {
+        "total_probes": 12,
+        "correct": 4,
+        "forgotten": 4,
+        "hallucinations": 4,
+        "retention_accuracy": 0.3333,
+        "forgotten_rate": 0.3333,
+        "hallucination_rate": 0.3333,
+        "coherence_score": 0.3333,
+        "cross_session_retention": 0.0,
+        "within_session_retention": 1.0,
+        "retention_accuracy_ci_95": [
+          0.1381,
+          0.6094
+        ],
+        "hallucination_rate_ci_95": [
+          0.1381,
+          0.6094
+        ]
+      },
+      "decay_curve": [
+        {
+          "label": "within-session",
+          "filler_turns": 0,
+          "accuracy": 1.0,
+          "total": 4
+        },
+        {
+          "label": "cross-session-1",
+          "filler_turns": 0,
+          "accuracy": 0.0,
+          "total": 4
+        },
+        {
+          "label": "cross-session-2",
+          "filler_turns": 0,
+          "accuracy": 0.0,
+          "total": 4
+        }
+      ],
+      "context_tokens_used": 133,
+      "context_limit": 4096
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "Long-Session Coherence Drift",
+      "scenario_desc": "Facts are introduced at turn 0.  Recall accuracy is sampled after 5, 10, 20, and 30 filler turns, showing how performance degrades as context fills.",
+      "num_sessions": 1,
+      "num_facts": 6,
+      "probe_results": [
+        {
+          "fact_key": "name",
+          "fact_value": "Sam",
+          "response": "Based on our conversation, name is Sam.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 7,
+          "session": 0,
+          "phase_label": "after-0-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "age",
+          "fact_value": "30",
+          "response": "Based on our conversation, age is 30.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 8,
+          "session": 0,
+          "phase_label": "after-0-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "city",
+          "fact_value": "London",
+          "response": "Based on our conversation, city is London.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 9,
+          "session": 0,
+          "phase_label": "after-0-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "job",
+          "fact_value": "data scientist",
+          "response": "Based on our conversation, job is data scientist.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 10,
+          "session": 0,
+          "phase_label": "after-0-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "favourite book",
+          "fact_value": "Dune",
+          "response": "Based on our conversation, favourite book is Dune.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 11,
+          "session": 0,
+          "phase_label": "after-0-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "language",
+          "fact_value": "Python",
+          "response": "I think language is Python, if I recall correctly.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 12,
+          "session": 0,
+          "phase_label": "after-0-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Sam",
+          "response": "Based on our conversation, name is Sam.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 18,
+          "session": 0,
+          "phase_label": "after-5-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "age",
+          "fact_value": "30",
+          "response": "Based on our conversation, age is 30.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 19,
+          "session": 0,
+          "phase_label": "after-5-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "city",
+          "fact_value": "London",
+          "response": "I think city is London, if I recall correctly.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 20,
+          "session": 0,
+          "phase_label": "after-5-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "job",
+          "fact_value": "data scientist",
+          "response": "Based on our conversation, job is data scientist.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 21,
+          "session": 0,
+          "phase_label": "after-5-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "favourite book",
+          "fact_value": "Dune",
+          "response": "Based on our conversation, favourite book is Dune.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 22,
+          "session": 0,
+          "phase_label": "after-5-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "language",
+          "fact_value": "Python",
+          "response": "Based on our conversation, language is Python.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 23,
+          "session": 0,
+          "phase_label": "after-5-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Sam",
+          "response": "Based on our conversation, name is Sam.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 29,
+          "session": 0,
+          "phase_label": "after-10-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "age",
+          "fact_value": "30",
+          "response": "Based on our conversation, age is 30.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 30,
+          "session": 0,
+          "phase_label": "after-10-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "city",
+          "fact_value": "London",
+          "response": "Based on our conversation, city is London.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 31,
+          "session": 0,
+          "phase_label": "after-10-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "job",
+          "fact_value": "data scientist",
+          "response": "I think job is data scientist, if I recall correctly.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 32,
+          "session": 0,
+          "phase_label": "after-10-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "favourite book",
+          "fact_value": "Dune",
+          "response": "Based on our conversation, favourite book is Dune.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 33,
+          "session": 0,
+          "phase_label": "after-10-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "language",
+          "fact_value": "Python",
+          "response": "Based on our conversation, language is Python.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 34,
+          "session": 0,
+          "phase_label": "after-10-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Sam",
+          "response": "I believe name is Chris.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 45,
+          "session": 0,
+          "phase_label": "after-20-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "age",
+          "fact_value": "30",
+          "response": "I believe age is 25.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 46,
+          "session": 0,
+          "phase_label": "after-20-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "city",
+          "fact_value": "London",
+          "response": "I believe city is Bristol.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 47,
+          "session": 0,
+          "phase_label": "after-20-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "job",
+          "fact_value": "data scientist",
+          "response": "I'm sorry, I don't have any record of job in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 48,
+          "session": 0,
+          "phase_label": "after-20-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "favourite book",
+          "fact_value": "Dune",
+          "response": "I'm sorry, I don't have any record of favourite book in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 49,
+          "session": 0,
+          "phase_label": "after-20-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "language",
+          "fact_value": "Python",
+          "response": "I'm sorry, I don't have any record of language in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 50,
+          "session": 0,
+          "phase_label": "after-20-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Sam",
+          "response": "I'm sorry, I don't have any record of name in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 61,
+          "session": 0,
+          "phase_label": "after-30-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "age",
+          "fact_value": "30",
+          "response": "I'm sorry, I don't have any record of age in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 62,
+          "session": 0,
+          "phase_label": "after-30-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "city",
+          "fact_value": "London",
+          "response": "I believe city is Liverpool.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 63,
+          "session": 0,
+          "phase_label": "after-30-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "job",
+          "fact_value": "data scientist",
+          "response": "I believe job is developer.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 64,
+          "session": 0,
+          "phase_label": "after-30-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "favourite book",
+          "fact_value": "Dune",
+          "response": "I'm sorry, I don't have any record of favourite book in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 65,
+          "session": 0,
+          "phase_label": "after-30-turns",
+          "cross_session": false
+        },
+        {
+          "fact_key": "language",
+          "fact_value": "Python",
+          "response": "I believe language is 34.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 66,
+          "session": 0,
+          "phase_label": "after-30-turns",
+          "cross_session": false
+        }
+      ],
+      "labelled_probes": {
+        "after-0-turns": [
+          {
+            "fact_key": "name",
+            "fact_value": "Sam",
+            "response": "Based on our conversation, name is Sam.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 7,
+            "session": 0,
+            "phase_label": "after-0-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "age",
+            "fact_value": "30",
+            "response": "Based on our conversation, age is 30.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 8,
+            "session": 0,
+            "phase_label": "after-0-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "city",
+            "fact_value": "London",
+            "response": "Based on our conversation, city is London.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 9,
+            "session": 0,
+            "phase_label": "after-0-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "job",
+            "fact_value": "data scientist",
+            "response": "Based on our conversation, job is data scientist.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 10,
+            "session": 0,
+            "phase_label": "after-0-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "favourite book",
+            "fact_value": "Dune",
+            "response": "Based on our conversation, favourite book is Dune.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 11,
+            "session": 0,
+            "phase_label": "after-0-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "language",
+            "fact_value": "Python",
+            "response": "I think language is Python, if I recall correctly.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 12,
+            "session": 0,
+            "phase_label": "after-0-turns",
+            "cross_session": false
+          }
+        ],
+        "after-5-turns": [
+          {
+            "fact_key": "name",
+            "fact_value": "Sam",
+            "response": "Based on our conversation, name is Sam.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 18,
+            "session": 0,
+            "phase_label": "after-5-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "age",
+            "fact_value": "30",
+            "response": "Based on our conversation, age is 30.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 19,
+            "session": 0,
+            "phase_label": "after-5-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "city",
+            "fact_value": "London",
+            "response": "I think city is London, if I recall correctly.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 20,
+            "session": 0,
+            "phase_label": "after-5-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "job",
+            "fact_value": "data scientist",
+            "response": "Based on our conversation, job is data scientist.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 21,
+            "session": 0,
+            "phase_label": "after-5-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "favourite book",
+            "fact_value": "Dune",
+            "response": "Based on our conversation, favourite book is Dune.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 22,
+            "session": 0,
+            "phase_label": "after-5-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "language",
+            "fact_value": "Python",
+            "response": "Based on our conversation, language is Python.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 23,
+            "session": 0,
+            "phase_label": "after-5-turns",
+            "cross_session": false
+          }
+        ],
+        "after-10-turns": [
+          {
+            "fact_key": "name",
+            "fact_value": "Sam",
+            "response": "Based on our conversation, name is Sam.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 29,
+            "session": 0,
+            "phase_label": "after-10-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "age",
+            "fact_value": "30",
+            "response": "Based on our conversation, age is 30.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 30,
+            "session": 0,
+            "phase_label": "after-10-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "city",
+            "fact_value": "London",
+            "response": "Based on our conversation, city is London.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 31,
+            "session": 0,
+            "phase_label": "after-10-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "job",
+            "fact_value": "data scientist",
+            "response": "I think job is data scientist, if I recall correctly.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 32,
+            "session": 0,
+            "phase_label": "after-10-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "favourite book",
+            "fact_value": "Dune",
+            "response": "Based on our conversation, favourite book is Dune.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 33,
+            "session": 0,
+            "phase_label": "after-10-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "language",
+            "fact_value": "Python",
+            "response": "Based on our conversation, language is Python.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 34,
+            "session": 0,
+            "phase_label": "after-10-turns",
+            "cross_session": false
+          }
+        ],
+        "after-20-turns": [
+          {
+            "fact_key": "name",
+            "fact_value": "Sam",
+            "response": "I believe name is Chris.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 45,
+            "session": 0,
+            "phase_label": "after-20-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "age",
+            "fact_value": "30",
+            "response": "I believe age is 25.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 46,
+            "session": 0,
+            "phase_label": "after-20-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "city",
+            "fact_value": "London",
+            "response": "I believe city is Bristol.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 47,
+            "session": 0,
+            "phase_label": "after-20-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "job",
+            "fact_value": "data scientist",
+            "response": "I'm sorry, I don't have any record of job in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 48,
+            "session": 0,
+            "phase_label": "after-20-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "favourite book",
+            "fact_value": "Dune",
+            "response": "I'm sorry, I don't have any record of favourite book in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 49,
+            "session": 0,
+            "phase_label": "after-20-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "language",
+            "fact_value": "Python",
+            "response": "I'm sorry, I don't have any record of language in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 50,
+            "session": 0,
+            "phase_label": "after-20-turns",
+            "cross_session": false
+          }
+        ],
+        "after-30-turns": [
+          {
+            "fact_key": "name",
+            "fact_value": "Sam",
+            "response": "I'm sorry, I don't have any record of name in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 61,
+            "session": 0,
+            "phase_label": "after-30-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "age",
+            "fact_value": "30",
+            "response": "I'm sorry, I don't have any record of age in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 62,
+            "session": 0,
+            "phase_label": "after-30-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "city",
+            "fact_value": "London",
+            "response": "I believe city is Liverpool.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 63,
+            "session": 0,
+            "phase_label": "after-30-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "job",
+            "fact_value": "data scientist",
+            "response": "I believe job is developer.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 64,
+            "session": 0,
+            "phase_label": "after-30-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "favourite book",
+            "fact_value": "Dune",
+            "response": "I'm sorry, I don't have any record of favourite book in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 65,
+            "session": 0,
+            "phase_label": "after-30-turns",
+            "cross_session": false
+          },
+          {
+            "fact_key": "language",
+            "fact_value": "Python",
+            "response": "I believe language is 34.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 66,
+            "session": 0,
+            "phase_label": "after-30-turns",
+            "cross_session": false
+          }
+        ]
+      },
+      "metrics": {
+        "total_probes": 30,
+        "correct": 18,
+        "forgotten": 6,
+        "hallucinations": 6,
+        "retention_accuracy": 0.6,
+        "forgotten_rate": 0.2,
+        "hallucination_rate": 0.2,
+        "coherence_score": 0.65,
+        "cross_session_retention": null,
+        "within_session_retention": 0.6,
+        "retention_accuracy_ci_95": [
+          0.4232,
+          0.7541
+        ],
+        "hallucination_rate_ci_95": [
+          0.095,
+          0.3731
+        ]
+      },
+      "decay_curve": [
+        {
+          "label": "after-0-turns",
+          "filler_turns": 0,
+          "accuracy": 1.0,
+          "total": 6
+        },
+        {
+          "label": "after-5-turns",
+          "filler_turns": 5,
+          "accuracy": 1.0,
+          "total": 6
+        },
+        {
+          "label": "after-10-turns",
+          "filler_turns": 10,
+          "accuracy": 1.0,
+          "total": 6
+        },
+        {
+          "label": "after-20-turns",
+          "filler_turns": 20,
+          "accuracy": 0.0,
+          "total": 6
+        },
+        {
+          "label": "after-30-turns",
+          "filler_turns": 30,
+          "accuracy": 0.0,
+          "total": 6
+        }
+      ],
+      "context_tokens_used": 1019,
+      "context_limit": 1024
+    },
+    {
+      "scenario_id": 5,
+      "scenario_name": "Rapid Fact Introduction Under Pressure",
+      "scenario_desc": "Eight facts are introduced in quick succession.  Immediate recall is tested (expected: high accuracy).  After a session restart all facts are probed again (expected: 0% recall).",
+      "num_sessions": 2,
+      "num_facts": 8,
+      "probe_results": [
+        {
+          "fact_key": "name",
+          "fact_value": "Morgan",
+          "response": "Based on our conversation, name is Morgan.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 9,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "email",
+          "fact_value": "morgan@example.com",
+          "response": "I think email is morgan@example.com, if I recall correctly.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 10,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "phone number",
+          "fact_value": "07700900123",
+          "response": "Based on our conversation, phone number is 07700900123.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 11,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "emergency contact",
+          "fact_value": "Chris",
+          "response": "Based on our conversation, emergency contact is Chris.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 12,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "medical condition",
+          "fact_value": "none",
+          "response": "Based on our conversation, medical condition is none.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 13,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "nationality",
+          "fact_value": "British",
+          "response": "Based on our conversation, nationality is British.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 14,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "preferred language",
+          "fact_value": "English",
+          "response": "Based on our conversation, preferred language is English.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 15,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "dietary requirement",
+          "fact_value": "vegetarian",
+          "response": "Based on our conversation, dietary requirement is vegetarian.",
+          "outcome": "correct",
+          "in_context": true,
+          "turn": 16,
+          "session": 0,
+          "phase_label": "immediate",
+          "cross_session": false
+        },
+        {
+          "fact_key": "name",
+          "fact_value": "Morgan",
+          "response": "I'm sorry, I don't have any record of name in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 1,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "email",
+          "fact_value": "morgan@example.com",
+          "response": "I'm sorry, I don't have any record of email in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 2,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "phone number",
+          "fact_value": "07700900123",
+          "response": "From what I recall, phone number is 32100900770.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 3,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "emergency contact",
+          "fact_value": "Chris",
+          "response": "I'm sorry, I don't have any record of emergency contact in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 4,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "medical condition",
+          "fact_value": "none",
+          "response": "I'm sorry, I don't have any record of medical condition in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 5,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "nationality",
+          "fact_value": "British",
+          "response": "From what I recall, nationality is hsitirB.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 6,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "preferred language",
+          "fact_value": "English",
+          "response": "I'm sorry, I don't have any record of preferred language in our conversation.",
+          "outcome": "forgotten",
+          "in_context": false,
+          "turn": 7,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        },
+        {
+          "fact_key": "dietary requirement",
+          "fact_value": "vegetarian",
+          "response": "From what I recall, dietary requirement is nairategev.",
+          "outcome": "hallucination",
+          "in_context": false,
+          "turn": 8,
+          "session": 1,
+          "phase_label": "post-session-reset",
+          "cross_session": true
+        }
+      ],
+      "labelled_probes": {
+        "immediate": [
+          {
+            "fact_key": "name",
+            "fact_value": "Morgan",
+            "response": "Based on our conversation, name is Morgan.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 9,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "email",
+            "fact_value": "morgan@example.com",
+            "response": "I think email is morgan@example.com, if I recall correctly.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 10,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "phone number",
+            "fact_value": "07700900123",
+            "response": "Based on our conversation, phone number is 07700900123.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 11,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "emergency contact",
+            "fact_value": "Chris",
+            "response": "Based on our conversation, emergency contact is Chris.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 12,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "medical condition",
+            "fact_value": "none",
+            "response": "Based on our conversation, medical condition is none.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 13,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "nationality",
+            "fact_value": "British",
+            "response": "Based on our conversation, nationality is British.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 14,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "preferred language",
+            "fact_value": "English",
+            "response": "Based on our conversation, preferred language is English.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 15,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          },
+          {
+            "fact_key": "dietary requirement",
+            "fact_value": "vegetarian",
+            "response": "Based on our conversation, dietary requirement is vegetarian.",
+            "outcome": "correct",
+            "in_context": true,
+            "turn": 16,
+            "session": 0,
+            "phase_label": "immediate",
+            "cross_session": false
+          }
+        ],
+        "post-session-reset": [
+          {
+            "fact_key": "name",
+            "fact_value": "Morgan",
+            "response": "I'm sorry, I don't have any record of name in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 1,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "email",
+            "fact_value": "morgan@example.com",
+            "response": "I'm sorry, I don't have any record of email in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 2,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "phone number",
+            "fact_value": "07700900123",
+            "response": "From what I recall, phone number is 32100900770.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 3,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "emergency contact",
+            "fact_value": "Chris",
+            "response": "I'm sorry, I don't have any record of emergency contact in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 4,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "medical condition",
+            "fact_value": "none",
+            "response": "I'm sorry, I don't have any record of medical condition in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 5,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "nationality",
+            "fact_value": "British",
+            "response": "From what I recall, nationality is hsitirB.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 6,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "preferred language",
+            "fact_value": "English",
+            "response": "I'm sorry, I don't have any record of preferred language in our conversation.",
+            "outcome": "forgotten",
+            "in_context": false,
+            "turn": 7,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          },
+          {
+            "fact_key": "dietary requirement",
+            "fact_value": "vegetarian",
+            "response": "From what I recall, dietary requirement is nairategev.",
+            "outcome": "hallucination",
+            "in_context": false,
+            "turn": 8,
+            "session": 1,
+            "phase_label": "post-session-reset",
+            "cross_session": true
+          }
+        ]
+      },
+      "metrics": {
+        "total_probes": 16,
+        "correct": 8,
+        "forgotten": 5,
+        "hallucinations": 3,
+        "retention_accuracy": 0.5,
+        "forgotten_rate": 0.3125,
+        "hallucination_rate": 0.1875,
+        "coherence_score": 0.5312,
+        "cross_session_retention": 0.0,
+        "within_session_retention": 1.0,
+        "retention_accuracy_ci_95": [
+          0.28,
+          0.72
+        ],
+        "hallucination_rate_ci_95": [
+          0.0659,
+          0.4301
+        ]
+      },
+      "decay_curve": [
+        {
+          "label": "immediate",
+          "filler_turns": 0,
+          "accuracy": 1.0,
+          "total": 8
+        },
+        {
+          "label": "post-session-reset",
+          "filler_turns": 0,
+          "accuracy": 0.0,
+          "total": 8
+        }
+      ],
+      "context_tokens_used": 214,
+      "context_limit": 4096
+    }
+  ],
+  "overall": {
+    "mean_retention_accuracy": 0.2867,
+    "mean_forgotten_rate": 0.3349,
+    "mean_hallucination_rate": 0.3784,
+    "mean_coherence_score": 0.3029,
+    "mean_cross_session_retention": 0.0,
+    "mean_within_session_retention": 0.65
+  }
+}
