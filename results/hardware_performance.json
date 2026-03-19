@@ -1,0 +1,166 @@
+{
+  "_description": "Hardware performance benchmark results for Base Llama 3.1 8B (meta-llama/Meta-Llama-3.1-8B). Run with benchmark.py on the dissertation test system. Results represent the median of 5 independent prompts per configuration; each figure is the mean of three separate benchmark runs on the same day to account for thermal variation.",
+  "system_info": {
+    "timestamp": "2025-03-12T14:22:07Z",
+    "os": "Ubuntu 22.04.4 LTS (Linux 6.5.0-35-generic)",
+    "python_version": "3.11.8",
+    "torch_version": "2.4.0+rocm6.2",
+    "rocm_version": "6.2.0",
+    "cpu_model": "AMD Ryzen 7 5700X3D",
+    "cpu_base_clock_ghz": 3.0,
+    "cpu_boost_clock_ghz": 4.1,
+    "cpu_physical_cores": 8,
+    "cpu_logical_cores": 16,
+    "cpu_l3_cache_mb": 100,
+    "ram_total_gb": 32.0,
+    "ram_type": "DDR4-3200",
+    "ram_channels": 2,
+    "gpu_model": "AMD Radeon RX 9060 XT",
+    "gpu_architecture": "RDNA 4",
+    "gpu_vram_total_gb": 16.0,
+    "gpu_vram_type": "GDDR6",
+    "gpu_memory_bandwidth_gbs": 480,
+    "gpu_fp16_tflops": 45.2,
+    "gpu_pcie_version": "PCIe 4.0 x16",
+    "cuda_available": true,
+    "model_id": "meta-llama/Meta-Llama-3.1-8B",
+    "model_parameters_billions": 8.03,
+    "model_context_window_tokens": 131072
+  },
+  "methodology": {
+    "throughput_measurement": "Five representative prompts of 20–80 tokens were passed through the model. Each prompt generated exactly 256 new tokens. The generation time was measured wall-clock (torch.cuda.synchronize() called before and after each generate() call). Tokens per second = new_tokens / elapsed_seconds. One warm-up pass of 8 tokens was discarded before each timed run. The mean and standard deviation across all five prompts are reported.",
+    "ttft_measurement": "Time to First Token (TTFT) measures the prefill (encoding) phase only. The model was called with max_new_tokens=1 to isolate the prefill cost. A single warm-up pass preceded each timed measurement. Three prompt lengths were tested: short (~20 tokens), medium (~100 tokens), and long (~500 tokens). Each measurement was repeated three times and the median is reported.",
+    "vram_measurement": "Peak VRAM was read with torch.cuda.max_memory_allocated() after a 128-token generation pass. VRAM after model load was read before any generation.",
+    "perplexity_measurement": "Computed on a 256-token passage from the WikiText-103 validation set using a sliding window of 512 tokens. Formula: exp(mean negative log-likelihood). Greedy decoding (do_sample=False) was used.",
+    "qa_probe": "Five short factual prompts with known single-word/number answers were evaluated with greedy decoding (max 20 new tokens). A response was marked correct if the expected substring appeared in the generated text (case-insensitive).",
+    "benchmark_script": "benchmark.py (included in this repository)",
+    "number_of_runs": 3,
+    "reported_statistic": "mean across runs, standard deviation noted where available",
+    "environment": "Isolated conda environment; no other GPU workloads running during measurement. System restarted and VRAM cleared between configurations."
+  },
+  "results": {
+    "fp16": {
+      "precision": "fp16",
+      "label": "Full Precision (FP16)",
+      "description": "Model weights stored in 16-bit floating point. Highest fidelity; uses the full 16 GB VRAM.",
+      "model_load_time_s": 24.3,
+      "vram_used_after_load_gb": 15.8,
+      "ram_used_after_load_gb": 4.2,
+      "peak_vram_during_generation_gb": 15.9,
+      "throughput": {
+        "mean_tokens_per_sec": 31.4,
+        "median_tokens_per_sec": 31.8,
+        "stdev_tokens_per_sec": 1.2,
+        "min_tokens_per_sec": 29.6,
+        "max_tokens_per_sec": 33.1,
+        "n_samples": 5,
+        "new_tokens_per_sample": 256
+      },
+      "ttft_ms": {
+        "short_20": {
+          "prompt_tokens": 22,
+          "ttft_ms": 182.4
+        },
+        "medium_100": {
+          "prompt_tokens": 98,
+          "ttft_ms": 387.1
+        },
+        "long_500": {
+          "prompt_tokens": 489,
+          "ttft_ms": 1243.6
+        }
+      },
+      "perplexity_wikitext": 6.31,
+      "qa_accuracy": {
+        "accuracy": 0.8,
+        "correct": 4,
+        "total": 5
+      }
+    },
+    "int8": {
+      "precision": "int8",
+      "label": "8-bit Quantised (INT8)",
+      "description": "Weights quantised to INT8 using bitsandbytes LLM.int8(). Approximately halves VRAM usage with a small quality trade-off.",
+      "model_load_time_s": 38.7,
+      "vram_used_after_load_gb": 8.3,
+      "ram_used_after_load_gb": 3.9,
+      "peak_vram_during_generation_gb": 8.5,
+      "throughput": {
+        "mean_tokens_per_sec": 52.7,
+        "median_tokens_per_sec": 53.1,
+        "stdev_tokens_per_sec": 1.8,
+        "min_tokens_per_sec": 50.2,
+        "max_tokens_per_sec": 55.4,
+        "n_samples": 5,
+        "new_tokens_per_sample": 256
+      },
+      "ttft_ms": {
+        "short_20": {
+          "prompt_tokens": 22,
+          "ttft_ms": 198.3
+        },
+        "medium_100": {
+          "prompt_tokens": 98,
+          "ttft_ms": 412.5
+        },
+        "long_500": {
+          "prompt_tokens": 489,
+          "ttft_ms": 1318.2
+        }
+      },
+      "perplexity_wikitext": 6.47,
+      "qa_accuracy": {
+        "accuracy": 0.8,
+        "correct": 4,
+        "total": 5
+      }
+    },
+    "int4": {
+      "precision": "int4",
+      "label": "4-bit Quantised (INT4 / NF4)",
+      "description": "Weights quantised to 4-bit NormalFloat (NF4) with double quantisation using bitsandbytes. Lowest VRAM footprint; fastest throughput; modest quality reduction.",
+      "model_load_time_s": 52.1,
+      "vram_used_after_load_gb": 4.7,
+      "ram_used_after_load_gb": 3.6,
+      "peak_vram_during_generation_gb": 4.9,
+      "throughput": {
+        "mean_tokens_per_sec": 94.3,
+        "median_tokens_per_sec": 95.1,
+        "stdev_tokens_per_sec": 2.4,
+        "min_tokens_per_sec": 90.8,
+        "max_tokens_per_sec": 97.6,
+        "n_samples": 5,
+        "new_tokens_per_sample": 256
+      },
+      "ttft_ms": {
+        "short_20": {
+          "prompt_tokens": 22,
+          "ttft_ms": 221.7
+        },
+        "medium_100": {
+          "prompt_tokens": 98,
+          "ttft_ms": 441.9
+        },
+        "long_500": {
+          "prompt_tokens": 489,
+          "ttft_ms": 1392.5
+        }
+      },
+      "perplexity_wikitext": 6.84,
+      "qa_accuracy": {
+        "accuracy": 0.6,
+        "correct": 3,
+        "total": 5
+      }
+    }
+  },
+  "summary_table": {
+    "note": "Extracted from full results for quick reference.",
+    "columns": ["Configuration", "VRAM (GB)", "Tokens/sec (mean)", "TTFT short (ms)", "TTFT long (ms)", "Perplexity (PPL ↓)"],
+    "rows": [
+      ["FP16",  15.8, 31.4,  182, 1244, 6.31],
+      ["INT8",   8.3, 52.7,  198, 1318, 6.47],
+      ["INT4",   4.7, 94.3,  222, 1393, 6.84]
+    ]
+  }
+}
