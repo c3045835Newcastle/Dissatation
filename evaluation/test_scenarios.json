@@ -1,0 +1,172 @@
+{
+  "description": "Controlled test scenarios for evaluating long-term dialogue coherence and memory retention in the baseline Llama 3.1 8B dialogue system. Each scenario introduces specific facts in Session 1, then tests recall in Session 2 (new context window). This measures cross-session memory retention, coherence, and hallucination frequency.",
+  "evaluation_protocol": {
+    "sessions_per_scenario": 2,
+    "turns_per_session": 10,
+    "scoring": {
+      "retention_accuracy": "Binary (0 or 1) per fact recalled correctly when probed in Session 2",
+      "dialogue_coherence": "Scale 0.0-1.0; scored as proportion of responses that maintain logical consistency with established context",
+      "hallucination_frequency": "Proportion of factual responses containing information not in ground truth",
+      "forgotten_information_rate": "Proportion of introduced facts not recalled when probed"
+    }
+  },
+  "scenarios": [
+    {
+      "id": "S1",
+      "name": "Personal Identity and Preferences",
+      "description": "User introduces personal information (name, occupation, hobby) in Session 1. Session 2 tests recall of this information.",
+      "session_1_facts": [
+        "User's name is Alex",
+        "User works as a software engineer",
+        "User enjoys hiking on weekends",
+        "User is learning Spanish",
+        "User lives in Manchester"
+      ],
+      "session_1_dialogue": [
+        {"turn": 1, "user": "Hi, I'm Alex, a software engineer. Can you help me with a coding question?", "expected_acknowledgment": "name and occupation acknowledged"},
+        {"turn": 2, "user": "I've been working on a Python REST API this weekend, though I usually prefer hiking on weekends.", "expected_acknowledgment": "hobby acknowledged"},
+        {"turn": 3, "user": "I'm also trying to learn Spanish in my spare time. Any tips?", "expected_acknowledgment": "language learning acknowledged"},
+        {"turn": 4, "user": "I'm based in Manchester, so the weather hasn't been great for outdoor activities lately.", "expected_acknowledgment": "location acknowledged"},
+        {"turn": 5, "user": "Anyway, back to the coding question – how do I handle async tasks in FastAPI?", "expected_behavior": "answers coding question, may reference user context"},
+        {"turn": 6, "user": "Great, and what about error handling in FastAPI?", "expected_behavior": "continues coding discussion"},
+        {"turn": 7, "user": "Do you think learning Spanish will help me professionally as a software engineer?", "expected_behavior": "responds referencing both occupation and language learning"},
+        {"turn": 8, "user": "How about local tech meetups in Manchester for someone learning new skills?", "expected_behavior": "responds referencing location and learning context"},
+        {"turn": 9, "user": "One more Python question – how do I manage database connections with SQLAlchemy?", "expected_behavior": "answers coding question"},
+        {"turn": 10, "user": "Thanks for the help today, I'll try applying this on my hike tomorrow if it stops raining!", "expected_behavior": "friendly close referencing hobby and location context"}
+      ],
+      "session_2_probe_questions": [
+        {"turn": 1, "user": "Hello again. Can you remind me what you know about me from our last chat?", "probes_facts": ["name", "occupation", "hobby", "language", "location"], "scoring_type": "retention_accuracy"},
+        {"turn": 2, "user": "What is my name?", "expected_answer": "Alex", "probes_facts": ["name"], "scoring_type": "retention_accuracy"},
+        {"turn": 3, "user": "What do I do for work?", "expected_answer": "software engineer", "probes_facts": ["occupation"], "scoring_type": "retention_accuracy"},
+        {"turn": 4, "user": "What hobby did I mention I enjoy?", "expected_answer": "hiking", "probes_facts": ["hobby"], "scoring_type": "retention_accuracy"},
+        {"turn": 5, "user": "What language am I learning?", "expected_answer": "Spanish", "probes_facts": ["language"], "scoring_type": "retention_accuracy"},
+        {"turn": 6, "user": "Where do I live?", "expected_answer": "Manchester", "probes_facts": ["location"], "scoring_type": "retention_accuracy"}
+      ]
+    },
+    {
+      "id": "S2",
+      "name": "Project Development Tracking",
+      "description": "User discusses a software project over Session 1 with specific technical decisions. Session 2 tests whether the model recalls those decisions.",
+      "session_1_facts": [
+        "Project is called 'HealthTrack'",
+        "Backend uses Django REST Framework",
+        "Database is PostgreSQL",
+        "Frontend is React with TypeScript",
+        "Deployed on AWS EC2"
+      ],
+      "session_1_dialogue": [
+        {"turn": 1, "user": "I'm building a health tracking app called HealthTrack. Where should I start with the architecture?", "expected_acknowledgment": "project name acknowledged"},
+        {"turn": 2, "user": "I've decided to use Django REST Framework for the backend. Good choice?", "expected_acknowledgment": "backend tech acknowledged"},
+        {"turn": 3, "user": "For the database, I'm going with PostgreSQL because of its reliability.", "expected_acknowledgment": "database acknowledged"},
+        {"turn": 4, "user": "The frontend will be React with TypeScript. Any component library recommendations?", "expected_acknowledgment": "frontend acknowledged"},
+        {"turn": 5, "user": "I plan to deploy on AWS EC2. How do I set up the Django server there?", "expected_acknowledgment": "deployment platform acknowledged"},
+        {"turn": 6, "user": "How do I connect Django to PostgreSQL in a production environment?", "expected_behavior": "technical advice for project setup"},
+        {"turn": 7, "user": "What authentication approach would you recommend for HealthTrack?", "expected_behavior": "advice referencing project name and context"},
+        {"turn": 8, "user": "How do I handle CORS between the React frontend and Django backend?", "expected_behavior": "continues technical discussion with project context"},
+        {"turn": 9, "user": "Any tips for health data security with PostgreSQL?", "expected_behavior": "advice referencing database and domain"},
+        {"turn": 10, "user": "Thanks, I think I have a good plan now for HealthTrack.", "expected_behavior": "affirming close referencing project"}
+      ],
+      "session_2_probe_questions": [
+        {"turn": 1, "user": "Hi, I need to continue working on my app. Do you remember its name?", "expected_answer": "HealthTrack", "probes_facts": ["project_name"], "scoring_type": "retention_accuracy"},
+        {"turn": 2, "user": "What backend framework did I choose for my project?", "expected_answer": "Django REST Framework", "probes_facts": ["backend"], "scoring_type": "retention_accuracy"},
+        {"turn": 3, "user": "Which database am I using?", "expected_answer": "PostgreSQL", "probes_facts": ["database"], "scoring_type": "retention_accuracy"},
+        {"turn": 4, "user": "What is my frontend stack?", "expected_answer": "React with TypeScript", "probes_facts": ["frontend"], "scoring_type": "retention_accuracy"},
+        {"turn": 5, "user": "Where am I deploying my app?", "expected_answer": "AWS EC2", "probes_facts": ["deployment"], "scoring_type": "retention_accuracy"}
+      ]
+    },
+    {
+      "id": "S3",
+      "name": "Factual Knowledge with Hallucination Testing",
+      "description": "Tests the model's tendency to hallucinate when asked factual questions, both within and across sessions. Ground truth answers provided for comparison.",
+      "session_1_facts": [],
+      "ground_truth_facts": [
+        {"question": "What year was the Transformer architecture introduced?", "answer": "2017", "source": "Vaswani et al., 2017"},
+        {"question": "What is the context window size of Llama 3.1 8B?", "answer": "128,000 tokens", "source": "Meta AI, 2024"},
+        {"question": "What does RAG stand for?", "answer": "Retrieval-Augmented Generation", "source": "Lewis et al., 2020"},
+        {"question": "What is the parameter count of Llama 3.1 8B?", "answer": "8 billion parameters", "source": "Meta AI, 2024"},
+        {"question": "What vector similarity search library is commonly used with LLMs?", "answer": "FAISS (Facebook AI Similarity Search)", "source": "Johnson et al., 2017"},
+        {"question": "What is the working memory model proposed by Baddeley?", "answer": "A multi-component model with central executive, phonological loop, visuospatial sketchpad, and episodic buffer", "source": "Baddeley, 1992"},
+        {"question": "What company developed the Llama 3.1 model?", "answer": "Meta AI", "source": "Meta AI, 2024"},
+        {"question": "What is the primary limitation of context-window-based LLM memory?", "answer": "Information outside the context window becomes inaccessible; no cross-session persistence", "source": "Bubeck et al., 2023"}
+      ],
+      "session_1_dialogue": [
+        {"turn": 1, "user": "What year was the Transformer architecture introduced?", "scoring_type": "hallucination"},
+        {"turn": 2, "user": "How many tokens can Llama 3.1 8B process in its context window?", "scoring_type": "hallucination"},
+        {"turn": 3, "user": "What does RAG stand for in the context of LLMs?", "scoring_type": "hallucination"},
+        {"turn": 4, "user": "How many parameters does Llama 3.1 8B have?", "scoring_type": "hallucination"},
+        {"turn": 5, "user": "What is FAISS and what is it used for?", "scoring_type": "hallucination"},
+        {"turn": 6, "user": "What is Baddeley's working memory model?", "scoring_type": "hallucination"},
+        {"turn": 7, "user": "Who developed the Llama 3.1 model?", "scoring_type": "hallucination"},
+        {"turn": 8, "user": "What is the main limitation of context-window-based memory in LLMs?", "scoring_type": "hallucination"}
+      ],
+      "session_2_probe_questions": [
+        {"turn": 1, "user": "In our last session, you answered a question about the Transformer architecture year. What year did you say?", "scoring_type": "cross_session_retention"},
+        {"turn": 2, "user": "What did we discuss earlier about Llama 3.1's context window?", "scoring_type": "cross_session_retention"}
+      ]
+    },
+    {
+      "id": "S4",
+      "name": "Multi-Session Continuity",
+      "description": "User has a multi-topic conversation in Session 1. Session 2 references multiple earlier topics to test broader coherence across sessions.",
+      "session_1_facts": [
+        "User's research topic: neural network pruning",
+        "User's supervisor is Dr Smith",
+        "Dissertation deadline: 3rd May 2026",
+        "User prefers PyTorch over TensorFlow",
+        "User has completed literature review and baseline implementation"
+      ],
+      "session_1_dialogue": [
+        {"turn": 1, "user": "I'm doing dissertation research on neural network pruning. Can you explain the main approaches?", "expected_acknowledgment": "research topic acknowledged"},
+        {"turn": 2, "user": "My supervisor Dr Smith suggested I look at magnitude-based pruning first.", "expected_acknowledgment": "supervisor name acknowledged"},
+        {"turn": 3, "user": "My deadline is 3rd May 2026, so I need to be efficient with time.", "expected_acknowledgment": "deadline acknowledged"},
+        {"turn": 4, "user": "I'm implementing in PyTorch, not TensorFlow. Any pruning libraries I should know about?", "expected_acknowledgment": "framework preference acknowledged"},
+        {"turn": 5, "user": "I've finished my literature review and the baseline model implementation.", "expected_acknowledgment": "progress acknowledged"},
+        {"turn": 6, "user": "What experiments should I run to evaluate my pruning approach?", "expected_behavior": "advice referencing research context"},
+        {"turn": 7, "user": "How do I measure accuracy loss due to pruning in PyTorch?", "expected_behavior": "technical advice with framework context"},
+        {"turn": 8, "user": "Dr Smith wants me to compare structured vs unstructured pruning. What's the difference?", "expected_behavior": "explains concept, references supervisor"},
+        {"turn": 9, "user": "Given my deadline, what milestones should I aim for?", "expected_behavior": "timeline advice referencing deadline"},
+        {"turn": 10, "user": "Thanks, I'll discuss this with Dr Smith tomorrow.", "expected_behavior": "friendly close referencing supervisor"}
+      ],
+      "session_2_probe_questions": [
+        {"turn": 1, "user": "Hi, I want to continue our conversation from before. What topic are we working on?", "expected_answer": "neural network pruning", "probes_facts": ["research_topic"], "scoring_type": "retention_accuracy"},
+        {"turn": 2, "user": "What did I say my deadline was?", "expected_answer": "3rd May 2026", "probes_facts": ["deadline"], "scoring_type": "retention_accuracy"},
+        {"turn": 3, "user": "Which framework do I prefer for implementation?", "expected_answer": "PyTorch", "probes_facts": ["framework"], "scoring_type": "retention_accuracy"},
+        {"turn": 4, "user": "Who is my supervisor?", "expected_answer": "Dr Smith", "probes_facts": ["supervisor"], "scoring_type": "retention_accuracy"},
+        {"turn": 5, "user": "What have I already completed in my dissertation?", "expected_answer": "literature review and baseline implementation", "probes_facts": ["progress"], "scoring_type": "retention_accuracy"}
+      ]
+    },
+    {
+      "id": "S5",
+      "name": "Coherence Under Information Overload",
+      "description": "Tests dialogue coherence when many facts are introduced quickly in Session 1. Measures within-session coherence degradation and cross-session recall.",
+      "session_1_facts": [
+        "User wants to build an e-commerce app",
+        "Budget is £5,000",
+        "Target launch date is September 2026",
+        "Team size is 3 developers",
+        "Tech stack: Node.js, MongoDB, Vue.js",
+        "Target market: UK small businesses",
+        "Key features: inventory management, invoicing, multi-currency support"
+      ],
+      "session_1_dialogue": [
+        {"turn": 1, "user": "I need to plan an e-commerce application for UK small businesses.", "expected_acknowledgment": "app type and market acknowledged"},
+        {"turn": 2, "user": "We have a budget of £5,000 and a team of 3 developers.", "expected_acknowledgment": "budget and team size acknowledged"},
+        {"turn": 3, "user": "We want to launch by September 2026.", "expected_acknowledgment": "launch date acknowledged"},
+        {"turn": 4, "user": "Our stack is Node.js for the backend, MongoDB for data, and Vue.js for the frontend.", "expected_acknowledgment": "full tech stack acknowledged"},
+        {"turn": 5, "user": "The key features are inventory management, invoicing, and multi-currency support.", "expected_acknowledgment": "features acknowledged"},
+        {"turn": 6, "user": "Given our budget, how should we divide the work among 3 developers?", "expected_behavior": "advice referencing budget and team size"},
+        {"turn": 7, "user": "Can Vue.js handle the multi-currency display requirements?", "expected_behavior": "technical advice referencing frontend and feature"},
+        {"turn": 8, "user": "How do we handle UK tax compliance in the invoicing module?", "expected_behavior": "advice referencing UK market and feature"},
+        {"turn": 9, "user": "What MongoDB schema would you recommend for inventory management?", "expected_behavior": "technical advice referencing database and feature"},
+        {"turn": 10, "user": "Does our timeline seem realistic given our constraints?", "expected_behavior": "assessment referencing all constraints"}
+      ],
+      "session_2_probe_questions": [
+        {"turn": 1, "user": "Hello, continuing from last time. What kind of application are we building?", "expected_answer": "e-commerce application for UK small businesses", "probes_facts": ["app_type", "market"], "scoring_type": "retention_accuracy"},
+        {"turn": 2, "user": "What is our budget?", "expected_answer": "£5,000", "probes_facts": ["budget"], "scoring_type": "retention_accuracy"},
+        {"turn": 3, "user": "When do we want to launch?", "expected_answer": "September 2026", "probes_facts": ["launch_date"], "scoring_type": "retention_accuracy"},
+        {"turn": 4, "user": "What tech stack are we using?", "expected_answer": "Node.js, MongoDB, Vue.js", "probes_facts": ["tech_stack"], "scoring_type": "retention_accuracy"},
+        {"turn": 5, "user": "What are the three key features of our app?", "expected_answer": "inventory management, invoicing, multi-currency support", "probes_facts": ["features"], "scoring_type": "retention_accuracy"}
+      ]
+    }
+  ]
+}

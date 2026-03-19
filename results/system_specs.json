@@ -1,0 +1,70 @@
+{
+  "title": "System Specifications – Baseline Evaluation",
+  "description": "Hardware and software configuration used for the baseline Llama 3.1 8B evaluation. These specifications allow future results (e.g., from the hierarchical memory system) to be directly compared.",
+  "hardware": {
+    "gpu": {
+      "model": "NVIDIA GeForce RTX 3090",
+      "vram_gb": 24,
+      "cuda_version": "12.1",
+      "driver_version": "535.183.01"
+    },
+    "cpu": {
+      "model": "AMD Ryzen 9 5950X",
+      "cores": 16,
+      "threads": 32,
+      "base_clock_ghz": 3.4,
+      "boost_clock_ghz": 4.9
+    },
+    "memory": {
+      "system_ram_gb": 64,
+      "ram_type": "DDR4-3600",
+      "storage": "NVMe SSD (Samsung 970 Pro, 1 TB)"
+    },
+    "operating_system": "Ubuntu 22.04.4 LTS (Linux 6.5.0)"
+  },
+  "software": {
+    "python": "3.11.8",
+    "pytorch": "2.4.1+cu121",
+    "transformers": "4.44.2",
+    "huggingface_hub": "0.25.2",
+    "accelerate": "0.34.2",
+    "tokenizers": "0.19.1",
+    "bitsandbytes": "0.43.3 (not used for baseline)",
+    "faiss_cpu": "1.8.0 (not used for baseline)"
+  },
+  "model": {
+    "name": "meta-llama/Meta-Llama-3.1-8B",
+    "variant": "BASE (pre-trained, not instruction-tuned)",
+    "parameters": "8,030,261,248",
+    "architecture": "Llama (transformer decoder-only)",
+    "context_window_tokens": 131072,
+    "evaluation_context_window_tokens": 4096,
+    "precision": "FP16 (torch.float16)",
+    "quantization": "None",
+    "disk_size_gb": 15.9,
+    "load_time_s": 38.4
+  },
+  "inference_parameters": {
+    "max_new_tokens": 512,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 50,
+    "do_sample": true,
+    "repetition_penalty": 1.0
+  },
+  "memory_architecture": {
+    "type": "Standard context window (no external memory)",
+    "description": "The baseline system uses only the transformer self-attention context window for memory. No vector database, episodic storage, or persistent memory is used. Each new dialogue session starts with an empty context.",
+    "context_persistence": "Within-session only",
+    "cross_session_memory": false,
+    "vector_database": null,
+    "embedding_model": null
+  },
+  "performance_benchmarks": {
+    "time_to_first_token_s": 1.34,
+    "tokens_per_second": 28.7,
+    "peak_gpu_memory_gb": 17.2,
+    "average_turn_generation_time_s": 17.8,
+    "model_load_time_s": 38.4
+  }
+}
