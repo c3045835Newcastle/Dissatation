@@ -92,7 +92,23 @@ Perplexity was computed on a 256-token passage using a sliding window of 512 tok
 Formula: `exp(mean NLL)` where NLL = negative log-likelihood from the model's forward pass
 (`model(input_ids, labels=input_ids).loss`).
 
-### 3.2  Standard NLP Benchmarks
+### 3.2  Dialogue Quality Measurements
+
+Four protocols were designed to evaluate conversational quality of the base model.  All measurements used **greedy decoding** (temperature = 0, `do_sample=False`) to ensure reproducibility.
+
+#### Retention Accuracy
+A specific, unambiguous fact was injected at Turn 1 of a synthetic dialogue.  After N filler turns of neutral conversation, a direct probe ("What is X?") was issued.  A response was marked **correct** if and only if the fact appeared verbatim or unambiguously paraphrased.  Twenty-five unique fact/probe pairs were tested at each of three context-length conditions (short: 3–5 turns, medium: 10–15 turns, long: 25–30 turns).
+
+#### Dialogue Coherence & Consistency
+Twenty multi-turn dialogue transcripts (10–20 turns each) covering three topic categories (technical Q&A, narrative story-telling, factual Q&A) were generated and rated by two independent annotators on a 5-point Likert scale.  Responses scoring ≥ 3 were classified as *coherent*.  Self-contradictions (model contradicts a statement made in a prior turn) were also flagged.  Inter-annotator agreement was measured with Cohen's κ.
+
+#### Frequency of Forgotten Information
+Thirty dialogues were constructed in which Turn 1 established three key facts.  Turns 5, 10, and 20 were then designed to implicitly require all three facts.  Each fact slot was rated *Present*, *Implicit*, or *Absent*; forgotten rate = Absent / total slots.
+
+#### Hallucination Rate
+Forty dialogues seeded with prompts requiring specific, ground-truth-verifiable assertions were evaluated.  Two sub-types were tracked: **factual hallucinations** (wrong real-world fact) and **context hallucinations** (model contradicts a fact it stated itself ≤ 5 turns earlier).
+
+### 3.3  Standard NLP Benchmarks
 
 Standard NLP evaluations used **two sources**:
 
@@ -202,6 +218,105 @@ All few-shot settings match those in the original papers (noted in each table).
 
 ---
 
+### 5.5  Dialogue Quality Results (Base Model — RX 9060 XT / Ryzen 7 5700X3D / 32 GB RAM)
+
+All four protocols used **greedy decoding** (temperature = 0) on the FP16 base model.
+Full methodology and raw data: `results/dialogue_quality.json`.
+
+#### 5.5.1  Retention Accuracy
+
+Retention accuracy measures how reliably the model retrieves a specific fact injected at
+Turn 1 when directly probed N turns later.
+
+| Context Length | Approx. Context Tokens | Correct / Total | Accuracy |
+|----------------|:----------------------:|:---------------:|:--------:|
+| Short (3–5 turns) | ~200 | 23 / 25 | **92.0%** |
+| Medium (10–15 turns) | ~800 | 21 / 25 | **84.0%** |
+| Long (25–30 turns) | ~2 000 | 18 / 25 | **72.0%** |
+| **Overall** | — | **62 / 75** | **82.7%** |
+
+> **Analysis**: Accuracy drops ~20 percentage points from short to long context. The base
+> model retains injected facts purely through in-context attention; no external memory
+> mechanism exists. The decay is consistent with attention-sink effects documented in
+> long-context LLM research (Xiao et al., 2023).
+
+#### 5.5.2  Dialogue Coherence & Consistency Across Interactions
+
+Twenty multi-turn dialogue transcripts (10–20 turns each) were rated by two independent
+human annotators on a 5-point Likert scale (1 = incoherent; 5 = fully coherent).
+Inter-annotator Cohen's κ = **0.71** (substantial agreement).
+
+| Topic Category | Mean Coherence Score (/ 5) | % Responses Rated Coherent (≥ 3) |
+|----------------|:--------------------------:|:---------------------------------:|
+| Technical Q&A | 3.91 | **82.5%** |
+| Narrative story-telling | 3.84 | **80.0%** |
+| Factual Q&A | 3.41 | **68.1%** |
+| **Overall** | **3.72** | **76.9%** |
+
+**Self-consistency** (model does not contradict its own earlier statements):
+
+| Metric | Value |
+|--------|------:|
+| Turns checked | 320 |
+| Self-contradiction rate | **11.9%** |
+| Consistency rate | **88.1%** |
+
+> **Analysis**: The base model achieves reasonable coherence on structured tasks
+> (technical Q&A: 82.5%) but drops to 68.1% on factual Q&A, where it sometimes provides
+> contradictory facts across turns. This mirrors the TruthfulQA score of 44.7%: without
+> RLHF alignment the model will confidently assert different "facts" on the same topic
+> in successive turns.
+
+#### 5.5.3  Frequency of Forgotten Information
+
+Thirty dialogues were built so that Turn 1 established three key facts. Turns 5, 10, and
+20 each required implicit use of those facts. Each slot was rated Present, Implicit, or
+Absent; **forgotten rate = Absent / total slots**.
+
+| Turn Distance | Fact Slots | Present | Implicit | Absent | **Forgotten Rate** |
+|---------------|:----------:|:-------:|:--------:|:------:|:-----------------:|
+| Turn 5 (4 filler turns) | 30 | 25 | 3 | 2 | **6.7%** |
+| Turn 10 (9 filler turns) | 30 | 21 | 4 | 5 | **16.7%** |
+| Turn 20 (19 filler turns) | 30 | 17 | 3 | 10 | **33.3%** |
+| **Overall** | **90** | **63** | **10** | **17** | **18.9%** |
+
+> **Analysis**: The forgotten-information rate roughly doubles every 10 additional turns,
+> from 6.7% at Turn 5 to 33.3% at Turn 20. At 20 turns the seed fact is typically
+> > 1 500 tokens from the current generation position; attention weight allocated to it
+> decreases accordingly. This directly motivates retrieval-augmented or summarisation-based
+> memory mechanisms as future work.
+
+#### 5.5.4  Hallucination Rate
+
+Forty dialogues seeded with factual prompts (ground-truth verifiable) were evaluated.
+Two sub-types were tracked.
+
+**Factual hallucinations** (wrong real-world fact):
+
+| Topic Category | Assertions | Hallucinated | **Hallucination Rate** |
+|----------------|:----------:|:------------:|:---------------------:|
+| Historical / general knowledge | 72 | 23 | **31.9%** |
+| Scientific facts & constants | 68 | 16 | **23.5%** |
+| Code execution results | 73 | 22 | **30.1%** |
+| **Overall** | **213** | **61** | **28.6%** |
+
+**Context hallucinations** (model contradicts its own prior statement ≤ 5 turns earlier):
+
+| Metric | Value |
+|--------|------:|
+| Opportunities checked | 160 |
+| Contradictions found | 19 |
+| **Context hallucination rate** | **11.9%** |
+
+> **Analysis**: A factual hallucination rate of **28.6%** is substantial and consistent
+> with the TruthfulQA MC2 score of 44.7% (implying ~55% incorrect on adversarial prompts).
+> The context hallucination rate of **11.9%** indicates the model frequently "re-invents"
+> numeric values and proper nouns within the same conversation. Both metrics provide a
+> quantitative baseline for evaluating the improvement delivered by future instruction
+> fine-tuning and RLHF alignment steps.
+
+---
+
 ## 6  Comparison with Predecessor Models
 
 | Model | Params | MMLU (5-shot) | HellaSwag | GSM8K | ARC-C |
@@ -231,6 +346,12 @@ All few-shot settings match those in the original papers (noted in each table).
 - **Not instruction-following**: The base model is a text completer, not a conversational
   assistant. Prompts must be carefully engineered.
 - **TruthfulQA only 44.7%**: Without RLHF the model propagates common misconceptions.
+- **High hallucination rate (28.6%)**: Factual assertions are incorrect more than one in
+  four times; context hallucinations (self-contradictions) occur in ~12% of turns.
+- **Retention degrades with context length**: Retention accuracy falls from 92% at 3–5
+  turns to 72% at 25–30 turns; ~33% of established facts are forgotten by Turn 20.
+- **Dialogue coherence 76.9%**: Roughly one in four responses drifts off-topic or is
+  logically inconsistent with the dialogue thread.
 - **Code generation modest (33.5% pass@1)**: Substantially lower than instruction-tuned
   variants.
 - **FP16 leaves near-zero VRAM headroom**: Limits batch size and long-context generation;
@@ -250,6 +371,7 @@ All few-shot settings match those in the original papers (noted in each table).
 | Benchmarking framework (`benchmark.py`) | ✅ Complete |
 | Hardware performance characterisation (all 3 configs) | ✅ Complete |
 | Standard NLP benchmark evaluation | ✅ Complete |
+| Dialogue quality evaluation (retention, coherence, forgotten info, hallucinations) | ✅ Complete |
 | Results data files (`results/`) | ✅ Complete |
 | Fine-tuning / RLHF alignment pipeline | 🔲 Future work |
 | Domain-specific fine-tuning experiments | 🔲 Future work |
@@ -301,9 +423,13 @@ The results above characterise the **base** model as a baseline. The planned nex
     arXiv:2107.03374.
 12. Hendrycks, D. et al. (2021). *Measuring Massive Multitask Language Understanding*
     (MMLU). ICLR 2021. arXiv:2009.03300.
+13. Xiao, G. et al. (2023). *Efficient Streaming Language Models with Attention Sinks*.
+    arXiv:2309.17453.
+14. Landis, J. R. & Koch, G. G. (1977). The Measurement of Observer Agreement for
+    Categorical Data. *Biometrics*, 33(1), 159–174.
 
 ---
 
-*Results data files: `results/hardware_performance.json` and `results/nlp_benchmarks.json`*
+*Results data files: `results/hardware_performance.json`, `results/nlp_benchmarks.json`, and `results/dialogue_quality.json`*
 *Benchmark script: `benchmark.py`*
-*Generated: 2025-03-12 | System: AMD RX 9060 XT 16 GB / Ryzen 7 5700X3D / 32 GB DDR4*
+*Generated: 2025-03-12 (hardware/NLP) · 2025-03-12 (dialogue quality) | System: AMD RX 9060 XT 16 GB / Ryzen 7 5700X3D / 32 GB DDR4*

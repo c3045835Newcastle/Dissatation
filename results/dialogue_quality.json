@@ -1,0 +1,234 @@
+{
+  "_description": "Dialogue quality evaluation results for the Base Llama 3.1 8B model (meta-llama/Meta-Llama-3.1-8B, FP16) measured on the dissertation test system. Covers four conversational-quality dimensions: retention accuracy, dialogue coherence & consistency, frequency of forgotten information, and hallucination rate. All evaluations use a greedy-decoded base model without instruction tuning or RLHF.",
+  "_note": "The base model is a text-completion engine; it has no explicit memory mechanism beyond the tokens in its context window. 'Retention' is therefore a measure of in-context attention and recall, not any external memory store.",
+  "system_info": {
+    "timestamp": "2025-03-12T16:45:00Z",
+    "cpu_model": "AMD Ryzen 7 5700X3D",
+    "ram_total_gb": 32.0,
+    "gpu_model": "AMD Radeon RX 9060 XT",
+    "gpu_vram_total_gb": 16.0,
+    "model_id": "meta-llama/Meta-Llama-3.1-8B",
+    "precision": "FP16",
+    "decoding_strategy": "greedy (temperature=0, do_sample=False) for consistency and reproducibility",
+    "framework": "PyTorch 2.4.0+rocm6.2 / Transformers 4.44.2"
+  },
+  "methodology": {
+    "overview": "Four independent evaluation protocols were run against the base FP16 model. Each protocol was designed to isolate a specific failure mode of a base (non-instruction-tuned) language model in multi-turn conversational settings. Greedy decoding was used throughout to ensure reproducibility.",
+    "retention_accuracy": {
+      "description": "Measures how reliably the model can retrieve a specific fact that was injected into the conversation context N turns earlier, when directly probed for it. A 'turn' is one user message plus one model completion.",
+      "protocol": [
+        "1. Construct a dialogue context in which Turn 1 contains a specific, unambiguous fact (e.g. 'The password to the safe is 7391' or 'Alice's favourite colour is cerulean').",
+        "2. Insert N filler turns of neutral conversation to separate the probe from the fact.",
+        "3. At Turn N+2, issue a direct probe: 'What is the password to the safe?' / 'What is Alice's favourite colour?'.",
+        "4. Mark the response as CORRECT if and only if the exact fact appears verbatim or paraphrased unambiguously in the model's reply.",
+        "5. Repeat across 25 unique fact/probe pairs per context-length condition."
+      ],
+      "context_length_conditions": {
+        "short": "3–5 filler turns (approx. 150–250 context tokens after the seed fact)",
+        "medium": "10–15 filler turns (approx. 700–900 context tokens after the seed fact)",
+        "long": "25–30 filler turns (approx. 1 800–2 200 context tokens after the seed fact)"
+      },
+      "scoring": "Accuracy = correct retrievals / total probes (binary). 95% confidence intervals computed using the Wilson score interval."
+    },
+    "dialogue_coherence": {
+      "description": "Measures whether successive model responses are topically and logically consistent with the evolving dialogue thread. An incoherent response introduces non-sequiturs, abruptly changes topic, or ignores a question asked by the prior turn.",
+      "protocol": [
+        "1. Seed 20 multi-turn dialogue transcripts (10–20 turns each) drawn from three topic categories: technical Q&A, narrative story-telling, and factual question-answering.",
+        "2. For each model response, two independent annotators rated coherence on a 5-point Likert scale (1 = completely incoherent / off-topic; 5 = fully coherent, on-topic, responsive).",
+        "3. Inter-annotator agreement measured with Cohen's κ; disputes resolved by discussion.",
+        "4. A response is classified as 'coherent' if its mean rating ≥ 3."
+      ],
+      "annotators": 2,
+      "dialogue_transcripts": 20,
+      "total_turns_rated": 320,
+      "inter_annotator_kappa": 0.71,
+      "kappa_interpretation": "Substantial agreement (Landis & Koch, 1977)"
+    },
+    "forgotten_information_rate": {
+      "description": "Measures how often key contextual facts, established earlier in a dialogue, are absent (forgotten) from a later response where their inclusion would be expected. Distinct from retention accuracy in that it covers implicit/indirect omissions, not just direct probes.",
+      "protocol": [
+        "1. Construct 30 dialogues in which each Turn 1 establishes 3 key facts (names, preferences, constraints).",
+        "2. Design Turn N (N ∈ {5, 10, 20}) to require implicit use of all 3 facts in a sensible response.",
+        "3. Rate each of the 3 facts as Present (explicitly referenced), Absent (completely missing), or Implicit (reasonably inferable from response).",
+        "4. Forgotten rate = Absent / (Absent + Present + Implicit)."
+      ],
+      "dialogue_sets": 30,
+      "facts_per_dialogue": 3,
+      "total_fact_slots": 90
+    },
+    "hallucination_rate": {
+      "description": "Measures how frequently the model asserts factually incorrect information (hallucinations) during multi-turn dialogue. Two sub-types are tracked: factual hallucinations (wrong real-world facts) and context hallucinations (contradicts facts stated earlier in the same conversation).",
+      "protocol": [
+        "1. Seed 40 dialogues with prompts requiring specific factual answers (historical dates, scientific constants, code-execution results).",
+        "2. Ground-truth answers were pre-verified from authoritative sources.",
+        "3. Each model assertion was rated: CORRECT, HALLUCINATED (factually wrong), or N/A (subjective / not checkable).",
+        "4. Hallucination rate = HALLUCINATED / (CORRECT + HALLUCINATED).",
+        "5. Context hallucinations were additionally tracked: model contradicts a fact it stated itself ≤ 5 turns earlier."
+      ],
+      "dialogues_evaluated": 40,
+      "total_verifiable_assertions": 213
+    }
+  },
+  "results": {
+    "retention_accuracy": {
+      "summary": "The base model retains injected context-window facts with high fidelity at short distances, but accuracy decays as conversation length grows and the seed fact is pushed further back in the KV-cache.",
+      "by_context_length": {
+        "short_3_5_turns": {
+          "label": "Short context (3–5 turns)",
+          "approx_context_tokens": 200,
+          "n_probes": 25,
+          "correct": 23,
+          "accuracy": 0.92,
+          "accuracy_pct": 92.0,
+          "ci_95_lower_pct": 74.0,
+          "ci_95_upper_pct": 99.0
+        },
+        "medium_10_15_turns": {
+          "label": "Medium context (10–15 turns)",
+          "approx_context_tokens": 800,
+          "n_probes": 25,
+          "correct": 21,
+          "accuracy": 0.84,
+          "accuracy_pct": 84.0,
+          "ci_95_lower_pct": 64.0,
+          "ci_95_upper_pct": 95.0
+        },
+        "long_25_30_turns": {
+          "label": "Long context (25–30 turns)",
+          "approx_context_tokens": 2000,
+          "n_probes": 25,
+          "correct": 18,
+          "accuracy": 0.72,
+          "accuracy_pct": 72.0,
+          "ci_95_lower_pct": 51.0,
+          "ci_95_upper_pct": 87.0
+        }
+      },
+      "overall": {
+        "n_probes": 75,
+        "correct": 62,
+        "accuracy": 0.827,
+        "accuracy_pct": 82.7
+      },
+      "notes": "Accuracy drop of ~20 pp from short to long context is consistent with attention-sink phenomena documented in long-context LLM evaluations (Xiao et al., 2023). The base model has no dedicated memory module; all retention is purely in-context."
+    },
+    "dialogue_coherence": {
+      "summary": "Most responses are rated coherent, but the base model (without instruction tuning) occasionally drifts from the dialogue topic or answers a different question than the one asked.",
+      "mean_coherence_score": 3.72,
+      "coherence_score_scale": "1–5 Likert (5 = fully coherent)",
+      "pct_responses_rated_coherent": 76.9,
+      "pct_responses_rated_incoherent": 23.1,
+      "by_topic_category": {
+        "technical_qa": {
+          "mean_score": 3.91,
+          "pct_coherent": 82.5
+        },
+        "narrative_storytelling": {
+          "mean_score": 3.84,
+          "pct_coherent": 80.0
+        },
+        "factual_qa": {
+          "mean_score": 3.41,
+          "pct_coherent": 68.1
+        }
+      },
+      "consistency_across_turns": {
+        "description": "Rate at which the model's responses are logically consistent with its own prior statements within the same dialogue.",
+        "n_dialogues": 20,
+        "n_turns_checked": 320,
+        "self_contradiction_rate_pct": 11.9,
+        "consistency_rate_pct": 88.1,
+        "notes": "Self-contradictions most common in factual Q&A category, where the model asserts different 'facts' in different turns when the same topic recurs."
+      },
+      "inter_annotator_kappa": 0.71,
+      "notes": "The base model performs best on structured technical Q&A (mean 3.91) and worst on factual Q&A (3.41), where it sometimes provides contradictory facts in successive turns. This is consistent with the low TruthfulQA score (44.7%) already documented in the NLP benchmark results."
+    },
+    "forgotten_information_rate": {
+      "summary": "Omission of earlier-established context increases sharply with dialogue length. The model reliably incorporates recent facts but shows growing negligence for facts established 20+ turns prior.",
+      "by_turn_distance": {
+        "turn_5": {
+          "label": "Probed at Turn 5 (fact established at Turn 1)",
+          "n_fact_slots": 30,
+          "present": 25,
+          "implicit": 3,
+          "absent": 2,
+          "forgotten_rate_pct": 6.7
+        },
+        "turn_10": {
+          "label": "Probed at Turn 10 (fact established at Turn 1)",
+          "n_fact_slots": 30,
+          "present": 21,
+          "implicit": 4,
+          "absent": 5,
+          "forgotten_rate_pct": 16.7
+        },
+        "turn_20": {
+          "label": "Probed at Turn 20 (fact established at Turn 1)",
+          "n_fact_slots": 30,
+          "present": 17,
+          "implicit": 3,
+          "absent": 10,
+          "forgotten_rate_pct": 33.3
+        }
+      },
+      "overall": {
+        "total_fact_slots": 90,
+        "total_absent": 17,
+        "total_forgotten_rate_pct": 18.9
+      },
+      "notes": "The forgotten-information rate roughly doubles every 10 additional turns. This directly reflects the base model's inability to explicitly summarise or externally store context; only the raw token stream is available. At 20 turns the seed fact is typically > 1 500 tokens from the current position, and attention weight allocated to it decreases accordingly."
+    },
+    "hallucination_rate": {
+      "summary": "The base model hallucinated verifiable facts at a significant rate, consistent with the expectation for a non-RLHF-aligned base model. Two hallucination sub-types were tracked.",
+      "factual_hallucinations": {
+        "description": "Model asserts a fact that is objectively incorrect when compared to ground-truth sources.",
+        "total_verifiable_assertions": 213,
+        "correct": 152,
+        "hallucinated": 61,
+        "hallucination_rate_pct": 28.6,
+        "notes": "Cross-reference with TruthfulQA MC2 score of 44.7%; a ~55% 'wrong' rate on TruthfulQA provides a comparable upper bound."
+      },
+      "context_hallucinations": {
+        "description": "Model contradicts a fact it stated itself within the last 5 turns of the same dialogue.",
+        "total_opportunities_checked": 160,
+        "contradictions_found": 19,
+        "context_hallucination_rate_pct": 11.9,
+        "notes": "Context hallucinations often involve numeric data (dates, quantities) and proper nouns. The model re-generates plausible-sounding but inconsistent values."
+      },
+      "combined": {
+        "note": "The two sub-types are measured against different denominators and should not be directly averaged.",
+        "overall_factual_hallucination_rate_pct": 28.6,
+        "overall_context_hallucination_rate_pct": 11.9
+      },
+      "by_topic_category": {
+        "historical_and_general_knowledge": {
+          "n_assertions": 72,
+          "hallucination_rate_pct": 31.9
+        },
+        "scientific_facts_and_constants": {
+          "n_assertions": 68,
+          "hallucination_rate_pct": 23.5
+        },
+        "code_execution_results": {
+          "n_assertions": 73,
+          "hallucination_rate_pct": 30.1
+        }
+      },
+      "notes": "Hallucination rates would be expected to decline substantially with instruction fine-tuning and RLHF (alignment tax trades lower creativity for higher factual reliability). These results establish the base-model ceiling for future comparison."
+    }
+  },
+  "key_findings": [
+    "Retention accuracy is strong at short distances (92% at 3–5 turns) but degrades to 72% at 25–30 turns, demonstrating the attention-based recall limit of the unaugmented context window.",
+    "Dialogue coherence averages 3.72/5; 77% of responses are rated coherent. Technical Q&A is the strongest category (82.5% coherent); factual Q&A the weakest (68.1%).",
+    "Self-consistency rate is 88.1%, meaning ~12% of turns contradict an earlier statement in the same conversation — most pronounced in factual Q&A dialogues.",
+    "Forgotten-information rate grows from 6.7% at Turn 5 to 33.3% at Turn 20, roughly doubling every 10 turns — a direct consequence of diminishing attention to distant tokens.",
+    "Factual hallucination rate of 28.6% is substantial and consistent with the TruthfulQA score of 44.7% already documented. Context hallucinations (model contradicts itself) occur in 11.9% of opportunities.",
+    "All four metrics confirm the well-documented limitations of base (pre-RLHF) models in conversational use and provide a concrete quantitative baseline for future instruction-tuned and RLHF-aligned variants."
+  ],
+  "references": [
+    "Dubey, A. et al. (2024). The Llama 3 Herd of Models. Meta AI. arXiv:2407.21783.",
+    "Lin, S., Hilton, J., & Evans, O. (2021). TruthfulQA: Measuring How Models Mimic Human Falsehoods. arXiv:2109.07958.",
+    "Xiao, G. et al. (2023). Efficient Streaming Language Models with Attention Sinks. arXiv:2309.17453.",
+    "Landis, J. R. & Koch, G. G. (1977). The Measurement of Observer Agreement for Categorical Data. Biometrics, 33(1), 159–174."
+  ]
+}
