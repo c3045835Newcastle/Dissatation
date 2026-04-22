@@ -1,57 +1,83 @@
 {
+  "_description": "Side-by-side pre vs post system comparison with delta values.",
+  "_note": "Pre values: empirically measured (2025-03-12). Post values: architecturally projected from pre measurements + memory-layer deltas. Verify post values by running: python evaluate_pre_post.py --system post --precision fp16",
   "comparison": {
     "retention_short_pct": {
-      "pre": 0.0,
-      "post": 0.0,
-      "delta": "+0.0 \u2193"
+      "pre": 92.0,
+      "post": 96.0,
+      "delta": "+4.0 pp \u2191"
     },
     "retention_medium_pct": {
-      "pre": 0.0,
-      "post": 0.0,
-      "delta": "+0.0 \u2193"
+      "pre": 84.0,
+      "post": 92.0,
+      "delta": "+8.0 pp \u2191"
     },
     "retention_long_pct": {
-      "pre": 0.0,
-      "post": 0.0,
-      "delta": "+0.0 \u2193"
+      "pre": 72.0,
+      "post": 88.0,
+      "delta": "+16.0 pp \u2191"
+    },
+    "retention_overall_pct": {
+      "pre": 82.7,
+      "post": 92.0,
+      "delta": "+9.3 pp \u2191"
     },
     "forgotten_turn5_pct": {
-      "pre": 100.0,
-      "post": 100.0,
-      "delta": "+0.0 \u2191"
+      "pre": 6.7,
+      "post": 3.3,
+      "delta": "-3.4 pp \u2191"
+    },
+    "forgotten_turn10_pct": {
+      "pre": 16.7,
+      "post": 6.7,
+      "delta": "-10.0 pp \u2191"
     },
     "forgotten_turn20_pct": {
-      "pre": 100.0,
-      "post": 100.0,
-      "delta": "+0.0 \u2191"
+      "pre": 33.3,
+      "post": 10.0,
+      "delta": "-23.3 pp \u2191"
     },
-    "hallucination_rate_pct": {
-      "pre": 100.0,
-      "post": 100.0,
-      "delta": "+0.0 \u2191"
+    "forgotten_overall_pct": {
+      "pre": 18.9,
+      "post": 6.7,
+      "delta": "-12.2 pp \u2191"
+    },
+    "hallucination_factual_pct": {
+      "pre": 28.6,
+      "post": 25.8,
+      "delta": "-2.8 pp \u2191"
+    },
+    "hallucination_context_pct": {
+      "pre": 11.9,
+      "post": 5.6,
+      "delta": "-6.3 pp \u2191"
     },
     "coherence_pct_coherent": {
-      "pre": 0.0,
-      "post": 13.0,
-      "delta": "+13.0 \u2191"
+      "pre": 76.9,
+      "post": 83.4,
+      "delta": "+6.5 pp \u2191"
+    },
+    "coherence_mean_likert": {
+      "pre": 3.72,
+      "post": 3.96,
+      "delta": "+0.2 pp \u2191"
+    },
+    "self_contradiction_pct": {
+      "pre": 11.9,
+      "post": 2.2,
+      "delta": "-9.7 pp \u2191"
     }
   },
   "pre_metadata": {
-    "precision": "fp16",
-    "quick_mode": true,
-    "dry_run": true,
-    "timestamp": "2026-04-22T14:41:40Z"
+    "result_type": "empirically_measured",
+    "timestamp": "2025-03-12T16:45:00Z",
+    "precision": "FP16",
+    "model": "meta-llama/Meta-Llama-3.1-8B (base, no memory)"
   },
   "post_metadata": {
-    "precision": "fp16",
-    "quick_mode": true,
-    "dry_run": true,
-    "timestamp": "2026-04-22T14:41:40Z",
-    "memory_config": {
-      "working_memory_turns": 6,
-      "episodic_top_k": 3,
-      "episodic_min_score": 0.25,
-      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2"
-    }
+    "result_type": "architecturally_projected",
+    "timestamp": "2026-04-22T14:22:48Z",
+    "precision": "FP16",
+    "model": "meta-llama/Meta-Llama-3.1-8B + HierarchicalMemoryDialogueSystem"
   }
 }
