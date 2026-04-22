@@ -1,0 +1,134 @@
+{
+  "_description": "Template for post-system (hierarchical memory) dialogue quality results. Run evaluate_pre_post.py --system post to populate with real values.",
+  "_instructions": "Replace all null values by running: python evaluate_pre_post.py --system post --precision fp16",
+  "_note": "Expected result ranges are provided as guidance based on the system design. Actual values will depend on model behaviour on your hardware.",
+  "system": "post",
+  "metadata": {
+    "precision": null,
+    "quick_mode": false,
+    "dry_run": false,
+    "timestamp": null,
+    "memory_config": {
+      "working_memory_turns": 6,
+      "episodic_top_k": 3,
+      "episodic_min_score": 0.25,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2"
+    }
+  },
+  "retention_accuracy": {
+    "short": {
+      "label": "short",
+      "approx_filler_turns": 4,
+      "n_probes": 25,
+      "correct": null,
+      "accuracy": null,
+      "accuracy_pct": null,
+      "_expected_range": "90–96% (small improvement over pre; fact still in working memory)"
+    },
+    "medium": {
+      "label": "medium",
+      "approx_filler_turns": 12,
+      "n_probes": 25,
+      "correct": null,
+      "accuracy": null,
+      "accuracy_pct": null,
+      "_expected_range": "88–93% (meaningful improvement; episodic retrieval recovers evicted turns)"
+    },
+    "long": {
+      "label": "long",
+      "approx_filler_turns": 26,
+      "n_probes": 25,
+      "correct": null,
+      "accuracy": null,
+      "accuracy_pct": null,
+      "_expected_range": "83–90% (largest improvement; episodic memory compensates for lost context window)"
+    },
+    "overall": {
+      "n_probes": 75,
+      "correct": null,
+      "accuracy_pct": null,
+      "_expected_range": "87–93% overall (vs 82.7% for pre-system)"
+    }
+  },
+  "forgotten_information": {
+    "n_scenarios": 10,
+    "facts_per_scenario": 3,
+    "by_turn": {
+      "turn_5": {
+        "n_fact_slots": 30,
+        "present": null,
+        "implicit": null,
+        "absent": null,
+        "forgotten_rate_pct": null,
+        "_expected_range": "2–5% (minimal improvement; facts still in working memory at Turn 5)"
+      },
+      "turn_10": {
+        "n_fact_slots": 30,
+        "present": null,
+        "implicit": null,
+        "absent": null,
+        "forgotten_rate_pct": null,
+        "_expected_range": "5–10% (significant improvement; episodic retrieval retrieves Turn 1 facts)"
+      },
+      "turn_20": {
+        "n_fact_slots": 30,
+        "present": null,
+        "implicit": null,
+        "absent": null,
+        "forgotten_rate_pct": null,
+        "_expected_range": "8–15% (major improvement over pre 33.3%; episodic memory compensates)"
+      }
+    },
+    "overall": {
+      "total_fact_slots": 90,
+      "total_absent": null,
+      "total_forgotten_rate_pct": null,
+      "_expected_range": "5–10% (vs 18.9% for pre-system)"
+    }
+  },
+  "hallucination": {
+    "n_assertions": 41,
+    "hallucinated": null,
+    "hallucination_rate_pct": null,
+    "by_domain": {
+      "hist": {
+        "n_assertions": 14,
+        "hallucinated": null,
+        "hallucination_rate_pct": null
+      },
+      "sci": {
+        "n_assertions": 13,
+        "hallucinated": null,
+        "hallucination_rate_pct": null
+      },
+      "code": {
+        "n_assertions": 14,
+        "hallucinated": null,
+        "hallucination_rate_pct": null
+      }
+    },
+    "_expected_range": "20–26% (modest improvement; semantic context injection helps with context hallucinations but not factual ones)"
+  },
+  "coherence": {
+    "n_responses_rated": null,
+    "n_coherent": null,
+    "pct_coherent": null,
+    "mean_coherence_raw": null,
+    "mean_coherence_likert_scaled": null,
+    "by_topic": {
+      "technical_qa": {
+        "mean_likert": null,
+        "pct_coherent": null
+      },
+      "factual_qa": {
+        "mean_likert": null,
+        "pct_coherent": null
+      },
+      "narrative": {
+        "mean_likert": null,
+        "pct_coherent": null
+      }
+    },
+    "_expected_range": "80–88% coherent (improvement from consistent semantic/episodic context)"
+  }
+}

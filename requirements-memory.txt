@@ -1,0 +1,14 @@
+# Additional dependencies for the hierarchical memory architecture
+# Install with: pip install -r requirements-memory.txt
+
+# FAISS — vector similarity search for episodic memory
+# Use faiss-gpu on CUDA/ROCm systems for faster indexing; faiss-cpu is fine for this project
+# (FAISS index size is small: hundreds of entries during a dialogue session)
+faiss-cpu>=1.7.4
+
+# Sentence-transformers — dense embedding model for episodic memory retrieval
+# Uses all-MiniLM-L6-v2 (~90 MB) by default; runs on CPU alongside GPU inference
+sentence-transformers>=2.7.0
+
+# numpy — required by faiss and sentence-transformers (likely already installed)
+numpy>=1.24.0

@@ -1,0 +1,345 @@
+{
+  "system": "post",
+  "retention_accuracy": {
+    "short": {
+      "label": "short",
+      "approx_filler_turns": 2,
+      "n_probes": 5,
+      "correct": 0,
+      "accuracy": 0.0,
+      "accuracy_pct": 0.0,
+      "details": [
+        {
+          "scenario_id": 0,
+          "fact": "The server room access code is 4821.",
+          "probe": "What is the server room access code?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the difference between supervised and unsupervised learning?",
+          "correct": false
+        },
+        {
+          "scenario_id": 1,
+          "fact": "The WiFi password for the lab is Falcon99.",
+          "probe": "What is the lab WiFi password?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the difference between supervised and unsupervised learning?",
+          "correct": false
+        },
+        {
+          "scenario_id": 2,
+          "fact": "The locker combination is 17-34-09.",
+          "probe": "What is the locker combination?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the difference between supervised and unsupervised learning?",
+          "correct": false
+        },
+        {
+          "scenario_id": 3,
+          "fact": "The encryption key for the backup is AX7-Zeta.",
+          "probe": "What is the encryption key for the backup?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the difference between supervised and unsupervised learning?",
+          "correct": false
+        },
+        {
+          "scenario_id": 4,
+          "fact": "The conference room PIN is 5530.",
+          "probe": "What is the conference room PIN?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the difference between supervised and unsupervised learning?",
+          "correct": false
+        }
+      ]
+    },
+    "medium": {
+      "label": "medium",
+      "approx_filler_turns": 5,
+      "n_probes": 5,
+      "correct": 0,
+      "accuracy": 0.0,
+      "accuracy_pct": 0.0,
+      "details": [
+        {
+          "scenario_id": 0,
+          "fact": "The server room access code is 4821.",
+          "probe": "What is the server room access code?",
+          "response_excerpt": "Based on what was mentioned earlier: Can you give an example of a classification problem?",
+          "correct": false
+        },
+        {
+          "scenario_id": 1,
+          "fact": "The WiFi password for the lab is Falcon99.",
+          "probe": "What is the lab WiFi password?",
+          "response_excerpt": "Based on what was mentioned earlier: Can you give an example of a classification problem?",
+          "correct": false
+        },
+        {
+          "scenario_id": 2,
+          "fact": "The locker combination is 17-34-09.",
+          "probe": "What is the locker combination?",
+          "response_excerpt": "Based on what was mentioned earlier: Can you give an example of a classification problem?",
+          "correct": false
+        },
+        {
+          "scenario_id": 3,
+          "fact": "The encryption key for the backup is AX7-Zeta.",
+          "probe": "What is the encryption key for the backup?",
+          "response_excerpt": "Based on what was mentioned earlier: Can you give an example of a classification problem?",
+          "correct": false
+        },
+        {
+          "scenario_id": 4,
+          "fact": "The conference room PIN is 5530.",
+          "probe": "What is the conference room PIN?",
+          "response_excerpt": "Based on what was mentioned earlier: Can you give an example of a classification problem?",
+          "correct": false
+        }
+      ]
+    },
+    "long": {
+      "label": "long",
+      "approx_filler_turns": 10,
+      "n_probes": 5,
+      "correct": 0,
+      "accuracy": 0.0,
+      "accuracy_pct": 0.0,
+      "details": [
+        {
+          "scenario_id": 0,
+          "fact": "The server room access code is 4821.",
+          "probe": "What is the server room access code?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the attention mechanism in transformers?",
+          "correct": false
+        },
+        {
+          "scenario_id": 1,
+          "fact": "The WiFi password for the lab is Falcon99.",
+          "probe": "What is the lab WiFi password?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the attention mechanism in transformers?",
+          "correct": false
+        },
+        {
+          "scenario_id": 2,
+          "fact": "The locker combination is 17-34-09.",
+          "probe": "What is the locker combination?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the attention mechanism in transformers?",
+          "correct": false
+        },
+        {
+          "scenario_id": 3,
+          "fact": "The encryption key for the backup is AX7-Zeta.",
+          "probe": "What is the encryption key for the backup?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the attention mechanism in transformers?",
+          "correct": false
+        },
+        {
+          "scenario_id": 4,
+          "fact": "The conference room PIN is 5530.",
+          "probe": "What is the conference room PIN?",
+          "response_excerpt": "Based on what was mentioned earlier: What is the attention mechanism in transformers?",
+          "correct": false
+        }
+      ]
+    },
+    "overall": {
+      "n_probes": 15,
+      "correct": 0,
+      "accuracy_pct": 0.0
+    }
+  },
+  "forgotten_information": {
+    "n_scenarios": 3,
+    "facts_per_scenario": 3,
+    "by_turn": {
+      "turn_5": {
+        "n_fact_slots": 9,
+        "present": 0,
+        "implicit": 0,
+        "absent": 9,
+        "forgotten_rate_pct": 100.0
+      },
+      "turn_10": {
+        "n_fact_slots": 9,
+        "present": 0,
+        "implicit": 0,
+        "absent": 9,
+        "forgotten_rate_pct": 100.0
+      },
+      "turn_20": {
+        "n_fact_slots": 9,
+        "present": 0,
+        "implicit": 0,
+        "absent": 9,
+        "forgotten_rate_pct": 100.0
+      }
+    },
+    "overall": {
+      "n_fact_slots": 27,
+      "present": 0,
+      "implicit": 0,
+      "absent": 27,
+      "forgotten_rate_pct": 100.0
+    },
+    "details": [
+      {
+        "scenario_id": 0,
+        "probe_responses": {
+          "turn_5": "Based on what was mentioned earlier: How does a neural network decide on its outputs?",
+          "turn_10": "Based on what was mentioned earlier: What is the purpose of a validation set?",
+          "turn_20": "Based on what was mentioned earlier: How does retrieval-augmented generation differ from standard generation?"
+        }
+      },
+      {
+        "scenario_id": 1,
+        "probe_responses": {
+          "turn_5": "Based on what was mentioned earlier: How does a neural network decide on its outputs?",
+          "turn_10": "Based on what was mentioned earlier: What is the purpose of a validation set?",
+          "turn_20": "Based on what was mentioned earlier: How does retrieval-augmented generation differ from standard generation?"
+        }
+      },
+      {
+        "scenario_id": 2,
+        "probe_responses": {
+          "turn_5": "Based on what was mentioned earlier: How does a neural network decide on its outputs?",
+          "turn_10": "Based on what was mentioned earlier: What is the purpose of a validation set?",
+          "turn_20": "Based on what was mentioned earlier: How does retrieval-augmented generation differ from standard generation?"
+        }
+      }
+    ]
+  },
+  "hallucination": {
+    "n_assertions": 10,
+    "hallucinated": 10,
+    "hallucination_rate_pct": 100.0,
+    "by_domain": {
+      "hist": {
+        "n_assertions": 10,
+        "hallucinated": 10,
+        "hallucination_rate_pct": 100.0
+      }
+    },
+    "details": [
+      {
+        "scenario_id": 0,
+        "prompt": "In what year was Python first released?",
+        "expected": [
+          "1991"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 1,
+        "prompt": "Who invented the World Wide Web?",
+        "expected": [
+          "Berners-Lee",
+          "Tim Berners",
+          "berners"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 2,
+        "prompt": "In what year did the first iPhone go on sale?",
+        "expected": [
+          "2007"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 3,
+        "prompt": "What is the capital city of Australia?",
+        "expected": [
+          "Canberra",
+          "canberra"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 4,
+        "prompt": "How many bones are in the adult human body?",
+        "expected": [
+          "206"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 5,
+        "prompt": "What year did World War II end?",
+        "expected": [
+          "1945"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 6,
+        "prompt": "Who wrote 'A Brief History of Time'?",
+        "expected": [
+          "Hawking",
+          "hawking"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 7,
+        "prompt": "What country is home to the Eiffel Tower?",
+        "expected": [
+          "France",
+          "france",
+          "Paris"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 8,
+        "prompt": "What is the chemical symbol for gold?",
+        "expected": [
+          "Au",
+          "au"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      },
+      {
+        "scenario_id": 9,
+        "prompt": "How many planets are in our solar system?",
+        "expected": [
+          "8",
+          "eight"
+        ],
+        "response_excerpt": "That is a good question. Let me explain the concept in detail.",
+        "hallucinated": true
+      }
+    ]
+  },
+  "coherence": {
+    "n_responses_rated": 23,
+    "n_coherent": 3,
+    "pct_coherent": 13.0,
+    "mean_coherence_raw": 0.029,
+    "mean_coherence_likert_scaled": 1.12,
+    "coherence_threshold": 0.15,
+    "by_topic": {
+      "technical_qa": {
+        "mean_raw_score": 0.029,
+        "mean_likert": 1.12,
+        "pct_coherent": 13.0
+      }
+    },
+    "note": "Coherence scored automatically via question-response keyword overlap (Jaccard similarity on content words). Threshold >= 0.15 = coherent. For final dissertation: supplement with human annotation (5-point Likert)."
+  },
+  "metadata": {
+    "precision": "fp16",
+    "quick_mode": true,
+    "dry_run": true,
+    "timestamp": "2026-04-22T14:41:40Z",
+    "memory_config": {
+      "working_memory_turns": 6,
+      "episodic_top_k": 3,
+      "episodic_min_score": 0.25,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2"
+    }
+  }
+}

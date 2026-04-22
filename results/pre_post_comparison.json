@@ -1,0 +1,57 @@
+{
+  "comparison": {
+    "retention_short_pct": {
+      "pre": 0.0,
+      "post": 0.0,
+      "delta": "+0.0 \u2193"
+    },
+    "retention_medium_pct": {
+      "pre": 0.0,
+      "post": 0.0,
+      "delta": "+0.0 \u2193"
+    },
+    "retention_long_pct": {
+      "pre": 0.0,
+      "post": 0.0,
+      "delta": "+0.0 \u2193"
+    },
+    "forgotten_turn5_pct": {
+      "pre": 100.0,
+      "post": 100.0,
+      "delta": "+0.0 \u2191"
+    },
+    "forgotten_turn20_pct": {
+      "pre": 100.0,
+      "post": 100.0,
+      "delta": "+0.0 \u2191"
+    },
+    "hallucination_rate_pct": {
+      "pre": 100.0,
+      "post": 100.0,
+      "delta": "+0.0 \u2191"
+    },
+    "coherence_pct_coherent": {
+      "pre": 0.0,
+      "post": 13.0,
+      "delta": "+13.0 \u2191"
+    }
+  },
+  "pre_metadata": {
+    "precision": "fp16",
+    "quick_mode": true,
+    "dry_run": true,
+    "timestamp": "2026-04-22T14:41:40Z"
+  },
+  "post_metadata": {
+    "precision": "fp16",
+    "quick_mode": true,
+    "dry_run": true,
+    "timestamp": "2026-04-22T14:41:40Z",
+    "memory_config": {
+      "working_memory_turns": 6,
+      "episodic_top_k": 3,
+      "episodic_min_score": 0.25,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2"
+    }
+  }
+}
