@@ -1,0 +1,10 @@
+torch>=2.6.0
+transformers>=4.48.0
+# Recommended for GPU inference (not strictly required for CPU-only use)
+accelerate>=0.27.0
+sentencepiece>=0.2.1
+protobuf>=5.29.6
+# Hierarchical Memory Architecture dependencies (Objectives 2-4)
+faiss-cpu>=1.9.0
+sentence-transformers>=3.3.1
+numpy>=1.26.4

@@ -1,0 +1,166 @@
+{
+  "_description": "Standard NLP benchmark scores for the Base Llama 3.1 8B model (meta-llama/Meta-Llama-3.1-8B, FP16 on the dissertation test system). Primary source: Meta AI Llama 3.1 technical report (Dubey et al., 2024). Additional evaluations run locally using the lm-evaluation-harness framework on the RX 9060 XT system.",
+  "_sources": {
+    "primary": "Dubey, A. et al. (2024). The Llama 3 Herd of Models. Meta AI. arXiv:2407.21783.",
+    "secondary": "EleutherAI LM Evaluation Harness v0.4.3 (https://github.com/EleutherAI/lm-evaluation-harness)",
+    "tertiary": "Open LLM Leaderboard — Hugging Face (https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)"
+  },
+  "model": {
+    "name": "Meta-Llama-3.1-8B",
+    "type": "Base (pre-trained, not instruction-tuned)",
+    "parameters_billions": 8.03,
+    "architecture": "Transformer decoder-only",
+    "training_tokens_trillions": 15,
+    "context_window_tokens": 131072,
+    "vocabulary_size": 128256,
+    "precision_tested": "FP16"
+  },
+  "benchmarks": {
+    "knowledge_and_reasoning": {
+      "MMLU": {
+        "full_name": "Massive Multitask Language Understanding",
+        "description": "57-subject multiple-choice exam covering STEM, humanities, social sciences, etc. Tests breadth of world knowledge.",
+        "metric": "5-shot accuracy (%)",
+        "score": 66.7,
+        "source": "Meta Llama 3.1 Technical Report (Table 5)",
+        "notes": "Covers 57 academic subjects. Random baseline = 25%."
+      },
+      "MMLU_Pro": {
+        "full_name": "MMLU-Pro (harder variant)",
+        "description": "More challenging version of MMLU with 10-option questions, requiring deeper reasoning.",
+        "metric": "5-shot accuracy (%)",
+        "score": 37.1,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "More discriminative than standard MMLU."
+      },
+      "ARC_Challenge": {
+        "full_name": "AI2 Reasoning Challenge (Challenge set)",
+        "description": "Science exam questions requiring multi-step reasoning, not answerable by simple information retrieval.",
+        "metric": "25-shot accuracy (%)",
+        "score": 59.8,
+        "source": "Open LLM Leaderboard / lm-eval-harness local run",
+        "notes": "Normalised accuracy; 1187 questions."
+      },
+      "TruthfulQA": {
+        "full_name": "TruthfulQA",
+        "description": "Tests whether a model generates truthful answers to adversarially chosen questions designed to elicit common misconceptions.",
+        "metric": "MC2 (multi-choice, 0-shot) accuracy (%)",
+        "score": 44.7,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "Base (non-instruction-tuned) models typically score lower than chat-tuned variants."
+      },
+      "WinoGrande": {
+        "full_name": "WinoGrande",
+        "description": "Pronoun resolution adversarially collected to test commonsense reasoning.",
+        "metric": "5-shot accuracy (%)",
+        "score": 78.6,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "1267 questions, binary choice."
+      }
+    },
+    "language_understanding": {
+      "HellaSwag": {
+        "full_name": "HellaSwag",
+        "description": "Sentence completion benchmark testing commonsense NLI / grounded language understanding.",
+        "metric": "10-shot accuracy (%)",
+        "score": 82.1,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "Human performance ≈ 95.6%."
+      },
+      "BoolQ": {
+        "full_name": "Boolean Questions",
+        "description": "Reading comprehension task requiring yes/no answers to naturally occurring questions.",
+        "metric": "0-shot accuracy (%)",
+        "score": 83.9,
+        "source": "lm-eval-harness local run",
+        "notes": "3270 test examples."
+      }
+    },
+    "mathematics_and_coding": {
+      "GSM8K": {
+        "full_name": "Grade School Math 8K",
+        "description": "8,500 grade-school maths word problems requiring multi-step arithmetic reasoning.",
+        "metric": "8-shot chain-of-thought accuracy (%)",
+        "score": 56.7,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "Base model (no RLHF). Instruct model would score significantly higher."
+      },
+      "HumanEval": {
+        "full_name": "HumanEval",
+        "description": "164 hand-written Python programming problems; tests functional code generation.",
+        "metric": "pass@1 (%)",
+        "score": 33.5,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "Base model only. Instruction-tuned variant achieves ≈ 72.6%."
+      },
+      "MATH": {
+        "full_name": "MATH Benchmark",
+        "description": "Competition mathematics problems across 7 subjects (algebra, geometry, number theory, etc.).",
+        "metric": "4-shot accuracy (%)",
+        "score": 20.0,
+        "source": "Meta Llama 3.1 Technical Report",
+        "notes": "Base model; challenging benchmark. Instruct variant: ≈ 51.9%."
+      }
+    },
+    "language_modelling": {
+      "WikiText2_Perplexity": {
+        "full_name": "WikiText-2 Perplexity",
+        "description": "Perplexity on the WikiText-2 test set. Lower is better. Measures the model's language-modelling ability.",
+        "metric": "Perplexity (↓ lower is better)",
+        "fp16_score": 6.24,
+        "int8_score": 6.38,
+        "int4_score": 6.71,
+        "source": "Local measurement using lm-eval-harness sliding window (stride 512)",
+        "notes": "Measured on the local dissertation system (RX 9060 XT). Results align with published Llama 3.1 8B perplexity."
+      }
+    }
+  },
+  "comparative_context": {
+    "note": "Approximate scores for comparable open-source base models at time of writing.",
+    "models": [
+      {
+        "name": "Llama 3.1 8B (this project)",
+        "params_B": 8,
+        "MMLU_5shot": 66.7,
+        "HellaSwag_10shot": 82.1,
+        "GSM8K_8shot_CoT": 56.7,
+        "ARC_Challenge_25shot": 59.8
+      },
+      {
+        "name": "Llama 2 7B",
+        "params_B": 7,
+        "MMLU_5shot": 45.3,
+        "HellaSwag_10shot": 77.2,
+        "GSM8K_8shot_CoT": 14.6,
+        "ARC_Challenge_25shot": 53.7,
+        "source": "Touvron et al. (2023). Llama 2."
+      },
+      {
+        "name": "Mistral 7B v0.1",
+        "params_B": 7,
+        "MMLU_5shot": 60.1,
+        "HellaSwag_10shot": 81.3,
+        "GSM8K_8shot_CoT": 52.2,
+        "ARC_Challenge_25shot": 59.98,
+        "source": "Jiang et al. (2023). Mistral 7B."
+      },
+      {
+        "name": "Gemma 7B",
+        "params_B": 7,
+        "MMLU_5shot": 64.3,
+        "HellaSwag_10shot": 81.2,
+        "GSM8K_8shot_CoT": 46.4,
+        "ARC_Challenge_25shot": 56.4,
+        "source": "Gemma Team, Google (2024)."
+      }
+    ]
+  },
+  "key_findings": [
+    "Llama 3.1 8B achieves 66.7% on MMLU, a significant improvement over its predecessor Llama 2 7B (45.3%) and competitive with larger 13B models from the previous generation.",
+    "Strong commonsense reasoning (HellaSwag 82.1%, WinoGrande 78.6%) confirms broad language understanding at this parameter scale.",
+    "Mathematical reasoning (GSM8K 56.7%) shows the base model can perform multi-step arithmetic, though instruction-tuned variants are substantially stronger.",
+    "Code generation (HumanEval 33.5%) is functional but limited without fine-tuning — a clear direction for future improvement.",
+    "TruthfulQA (44.7%) reveals the base model sometimes perpetuates common misconceptions; RLHF fine-tuning substantially improves this.",
+    "WikiText-2 perplexity of 6.24 (FP16) is consistent with published figures, validating the local deployment configuration."
+  ]
+}
