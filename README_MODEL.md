@@ -160,20 +160,6 @@ If you encounter out-of-memory errors:
 - Reduce MAX_NEW_TOKENS for faster responses
 - Enable flash attention if your GPU supports it
 
-## For Dissertation Use
-
-This base model implementation provides:
-- Clean, modular code structure
-- Easy-to-understand configuration
-- Simple inference interface
-- Extensible design for future modifications
-
-You can use this as a foundation for:
-- Comparing base vs fine-tuned models
-- Benchmarking performance
-- Building custom applications
-- Research experiments
-
 ## References
 
 - [Llama 3.1 Model Card](https://huggingface.co/meta-llama/Meta-Llama-3.1-8B)

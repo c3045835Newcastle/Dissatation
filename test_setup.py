@@ -1,9 +1,6 @@
 """
 Test script to validate the base model setup and hierarchical memory
 architecture (without actually loading the LLM).
-
-Tests the code structure and imports for all components described in the
-dissertation proposal objectives.
 """
 
 import sys
@@ -85,11 +82,11 @@ def test_config():
         print(f"✗ Invalid TEMPERATURE: {config.TEMPERATURE}")
         return False
 
-    # Check memory config (Objectives 2–3)
+    # Check memory config
     if config.WORKING_MEMORY_MAX_TURNS >= 10:
-        print(f"✓ WORKING_MEMORY_MAX_TURNS >= 10 (Objective 1): {config.WORKING_MEMORY_MAX_TURNS}")
+        print(f"✓ WORKING_MEMORY_MAX_TURNS >= 10: {config.WORKING_MEMORY_MAX_TURNS}")
     else:
-        print(f"✗ WORKING_MEMORY_MAX_TURNS must be >= 10 (Objective 1): {config.WORKING_MEMORY_MAX_TURNS}")
+        print(f"✗ WORKING_MEMORY_MAX_TURNS must be >= 10: {config.WORKING_MEMORY_MAX_TURNS}")
         return False
 
     if config.EPISODIC_TOP_K > 0:
@@ -99,9 +96,9 @@ def test_config():
         return False
 
     if config.EVALUATION_NUM_SCENARIOS >= 5:
-        print(f"✓ EVALUATION_NUM_SCENARIOS >= 5 (Objective 5): {config.EVALUATION_NUM_SCENARIOS}")
+        print(f"✓ EVALUATION_NUM_SCENARIOS >= 5: {config.EVALUATION_NUM_SCENARIOS}")
     else:
-        print(f"✗ EVALUATION_NUM_SCENARIOS must be >= 5 (Objective 5): {config.EVALUATION_NUM_SCENARIOS}")
+        print(f"✗ EVALUATION_NUM_SCENARIOS must be >= 5: {config.EVALUATION_NUM_SCENARIOS}")
         return False
 
     return True
@@ -144,8 +141,8 @@ def test_dependencies():
 
 
 def test_working_memory():
-    """Test Working Memory (Objective 2a)."""
-    print("\nTesting Working Memory (Objective 2a)...")
+    """Test Working Memory."""
+    print("\nTesting Working Memory...")
 
     from memory import WorkingMemory
 
@@ -174,8 +171,8 @@ def test_working_memory():
 
 
 def test_semantic_memory():
-    """Test Semantic Memory (Objective 2c)."""
-    print("\nTesting Semantic Memory (Objective 2c)...")
+    """Test Semantic Memory."""
+    print("\nTesting Semantic Memory...")
 
     from memory import SemanticMemory
 
@@ -215,8 +212,8 @@ def test_semantic_memory():
 
 
 def test_episodic_memory():
-    """Test Episodic Memory (Objective 2b)."""
-    print("\nTesting Episodic Memory (Objective 2b)...")
+    """Test Episodic Memory."""
+    print("\nTesting Episodic Memory...")
 
     from memory import EpisodicMemory
 
@@ -252,8 +249,8 @@ def test_episodic_memory():
 
 
 def test_memory_controller():
-    """Test Memory Controller (Objective 3)."""
-    print("\nTesting Memory Controller (Objective 3)...")
+    """Test Memory Controller."""
+    print("\nTesting Memory Controller...")
 
     from memory import WorkingMemory, EpisodicMemory, SemanticMemory, MemoryController
 
@@ -288,8 +285,8 @@ def test_memory_controller():
 
 
 def test_dialogue_pipeline():
-    """Test Dialogue Pipeline without LLM (Objective 4)."""
-    print("\nTesting Dialogue Pipeline (Objective 4)...")
+    """Test Dialogue Pipeline without LLM."""
+    print("\nTesting Dialogue Pipeline...")
 
     from dialogue_pipeline import HierarchicalMemoryPipeline
 
@@ -323,15 +320,15 @@ def test_dialogue_pipeline():
 
 
 def test_evaluation_scenarios():
-    """Test Evaluation Scenarios (Objective 5)."""
-    print("\nTesting Evaluation Scenarios (Objective 5)...")
+    """Test Evaluation Scenarios."""
+    print("\nTesting Evaluation Scenarios...")
 
     from evaluation import EvaluationScenarios
 
     scenarios = EvaluationScenarios.get_all()
 
     if len(scenarios) >= 5:
-        print(f"✓ {len(scenarios)} scenarios available (>= 5 required by Objective 5)")
+        print(f"✓ {len(scenarios)} scenarios available")
     else:
         print(f"✗ Only {len(scenarios)} scenarios; need at least 5")
         return False
@@ -347,8 +344,8 @@ def test_evaluation_scenarios():
 
 
 def test_evaluation_metrics():
-    """Test Evaluation Metrics (Objective 6)."""
-    print("\nTesting Evaluation Metrics (Objective 6)...")
+    """Test Evaluation Metrics."""
+    print("\nTesting Evaluation Metrics...")
 
     from evaluation.metrics import EvaluationMetrics, TurnResult
 
@@ -413,13 +410,13 @@ def main():
     results.append(("Dependencies", test_dependencies()))
 
     # New hierarchical memory tests
-    results.append(("Working Memory (Obj. 2a)", test_working_memory()))
-    results.append(("Semantic Memory (Obj. 2c)", test_semantic_memory()))
-    results.append(("Episodic Memory (Obj. 2b)", test_episodic_memory()))
-    results.append(("Memory Controller (Obj. 3)", test_memory_controller()))
-    results.append(("Dialogue Pipeline (Obj. 4)", test_dialogue_pipeline()))
-    results.append(("Evaluation Scenarios (Obj. 5)", test_evaluation_scenarios()))
-    results.append(("Evaluation Metrics (Obj. 6)", test_evaluation_metrics()))
+    results.append(("Working Memory", test_working_memory()))
+    results.append(("Semantic Memory", test_semantic_memory()))
+    results.append(("Episodic Memory", test_episodic_memory()))
+    results.append(("Memory Controller", test_memory_controller()))
+    results.append(("Dialogue Pipeline", test_dialogue_pipeline()))
+    results.append(("Evaluation Scenarios", test_evaluation_scenarios()))
+    results.append(("Evaluation Metrics", test_evaluation_metrics()))
 
     # Summary
     print("\n" + "=" * 60)

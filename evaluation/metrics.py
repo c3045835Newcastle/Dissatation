@@ -1,8 +1,7 @@
 """
 Evaluation Metrics module.
 
-Provides quantitative measures for all six criteria listed in Objective 6
-of the dissertation proposal:
+Provides quantitative measures for the six evaluation criteria:
 
   1. Retention accuracy          – % of correctly recalled facts
   2. Dialogue coherence          – consistency score across sessions

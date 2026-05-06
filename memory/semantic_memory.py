@@ -5,8 +5,6 @@ Stores persistent user facts and domain knowledge as structured key-value
 data.  Inspired by the semantic memory component of Baddeley's (1992)
 cognitive memory model: long-term storage of general world knowledge and
 personal facts that should persist across sessions.
-
-Objective 2c: Semantic memory for storing persistent user information.
 """
 
 import json

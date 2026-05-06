@@ -1,17 +1,9 @@
 """
 Configuration file for Base Llama 3.1 8B Model and Hierarchical Memory System.
-
-This configuration covers:
-  • The BASE Llama 3.1 8B model (Objective 1).
-  • The hierarchical memory architecture (Objectives 2–4):
-      - Working memory  : sliding context window
-      - Episodic memory : FAISS vector-similarity store
-      - Semantic memory : persistent user-fact store
-  • Evaluation settings (Objectives 5–6).
 """
 
 # ---------------------------------------------------------------------------
-# Model configuration (Objective 1 – Baseline Dialogue System)
+# Model configuration
 # ---------------------------------------------------------------------------
 
 MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B"  # Base model identifier
@@ -33,30 +25,27 @@ LOAD_IN_4BIT = False  # Set to True for even lower memory usage (requires bitsan
 USE_FLASH_ATTENTION = False  # Requires flash-attention package
 
 # ---------------------------------------------------------------------------
-# Hierarchical Memory Architecture (Objectives 2 & 3)
+# Hierarchical Memory Architecture
 # ---------------------------------------------------------------------------
 
-# Working Memory (Objective 2a)
-# Minimum 10 turns required by Objective 1; 20 provides a comfortable window.
+# Working Memory
 WORKING_MEMORY_MAX_TURNS = 20
 
-# Episodic Memory (Objective 2b – vector similarity search via FAISS)
+# Episodic Memory – vector similarity search via FAISS
 EPISODIC_EMBEDDING_MODEL = "all-MiniLM-L6-v2"  # Sentence-transformer model
 EPISODIC_TOP_K = 5          # Episodes retrieved per query
 EPISODIC_STORAGE_PATH = "./memory_store/episodic"
 
-# Semantic Memory (Objective 2c – persistent user facts)
+# Semantic Memory – persistent user facts
 SEMANTIC_STORAGE_PATH = "./memory_store/semantic_memory.json"
 
-# Memory Controller (Objective 3)
-# Consolidate working memory into episodic memory every N user turns.
+# Memory Controller – consolidate working memory into episodic memory every N user turns
 MEMORY_CONSOLIDATION_INTERVAL = 5
 
 # ---------------------------------------------------------------------------
-# Evaluation settings (Objectives 5 & 6)
+# Evaluation settings
 # ---------------------------------------------------------------------------
 
-# Number of experimental multi-session scenarios to run (minimum 5 per proposal)
 EVALUATION_NUM_SCENARIOS = 5
 
 # Path for persisting evaluation results

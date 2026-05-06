@@ -1,8 +1,8 @@
 """
 Evaluation Scenarios module.
 
-Provides the five controlled multi-session conversation scenarios required
-by Objective 5 of the dissertation proposal.
+Provides five controlled multi-session conversation scenarios for evaluating
+memory retention across dialogue sessions.
 
 Each scenario:
   • Spans at least two simulated sessions.
@@ -16,8 +16,6 @@ Scenarios
   3. Goal and Study Tracking         – academic goals, revision topics
   4. Health and Allergy Information  – health conditions, dietary restrictions
   5. Cross-Session Knowledge Probe   – technical facts introduced then recalled
-
-Objective 5: At least 5 multi-session conversations testing memory retention.
 """
 
 from dataclasses import dataclass, field

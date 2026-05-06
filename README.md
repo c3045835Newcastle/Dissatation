@@ -9,24 +9,10 @@ Long-Term Coherence in Local Large Language Model Dialogue Systems
 
 ## Overview
 
-This repository implements the full system described in the CSC3094 dissertation proposal.
-It extends a locally-deployed Llama 3.1 8B baseline with a **hierarchical memory
-architecture** inspired by Baddeley's (1992) cognitive memory model and evaluated
-using retrieval-augmented generation techniques (Lewis et al., 2020).
-
----
-
-## Dissertation Objectives → Implementation
-
-| # | Proposal Objective | Implementation |
-|---|-------------------|----------------|
-| 1 | Baseline dialogue system (10+ turns, no persistent memory) | `llama_base_model.py`, `inference.py` |
-| 2 | Hierarchical memory: working / episodic / semantic | `memory/` package |
-| 3 | Memory controller for storage & consolidation | `memory/memory_controller.py` |
-| 4 | Integrate memory into dialogue pipeline | `dialogue_pipeline.py` |
-| 5 | 5 controlled multi-session evaluation scenarios | `evaluation/evaluation_scenarios.py` |
-| 6 | Evaluation metrics (retention, coherence, hallucination…) | `evaluation/metrics.py` |
-| 7 | Analysis & results | `results/`, `BENCHMARK_RESULTS.md` |
+This repository implements a hierarchical memory architecture for locally-deployed
+Llama 3.1 8B dialogue systems. It extends the baseline model with a **hierarchical
+memory architecture** inspired by Baddeley's (1992) cognitive memory model and
+evaluated using retrieval-augmented generation techniques (Lewis et al., 2020).
 
 ---
 
@@ -35,21 +21,21 @@ using retrieval-augmented generation techniques (Lewis et al., 2020).
 ```
 .
 ├── config.py                        # Model + memory configuration
-├── llama_base_model.py              # Baseline Llama 3.1 8B wrapper (Obj. 1)
+├── llama_base_model.py              # Baseline Llama 3.1 8B wrapper
 ├── inference.py                     # Interactive baseline inference
-├── dialogue_pipeline.py             # Hierarchical memory pipeline (Obj. 4)
+├── dialogue_pipeline.py             # Hierarchical memory pipeline
 │
-├── memory/                          # Hierarchical memory modules (Obj. 2 & 3)
+├── memory/                          # Hierarchical memory modules
 │   ├── __init__.py
-│   ├── working_memory.py            # Sliding-window recent-context store (Obj. 2a)
-│   ├── episodic_memory.py           # FAISS vector-search past-interaction store (Obj. 2b)
-│   ├── semantic_memory.py           # Persistent user-fact store (Obj. 2c)
-│   └── memory_controller.py        # Storage & consolidation controller (Obj. 3)
+│   ├── working_memory.py            # Sliding-window recent-context store
+│   ├── episodic_memory.py           # FAISS vector-search past-interaction store
+│   ├── semantic_memory.py           # Persistent user-fact store
+│   └── memory_controller.py        # Storage & consolidation controller
 │
-├── evaluation/                      # Evaluation framework (Obj. 5 & 6)
+├── evaluation/                      # Evaluation framework
 │   ├── __init__.py
-│   ├── evaluation_scenarios.py     # 5 controlled multi-session scenarios (Obj. 5)
-│   └── metrics.py                  # Retention, coherence, hallucination metrics (Obj. 6)
+│   ├── evaluation_scenarios.py     # 5 controlled multi-session scenarios
+│   └── metrics.py                  # Retention, coherence, hallucination metrics
 │
 ├── benchmark.py                     # Throughput & perplexity benchmarking
 ├── examples.py                      # Usage examples
@@ -69,13 +55,13 @@ pip install -r requirements.txt
 huggingface-cli login   # required for Llama model access
 ```
 
-### Run baseline (Objective 1)
+### Run baseline
 
 ```bash
 python inference.py
 ```
 
-### Run hierarchical memory pipeline (Objectives 2–4)
+### Run hierarchical memory pipeline
 
 ```python
 from dialogue_pipeline import HierarchicalMemoryPipeline
@@ -99,7 +85,7 @@ print(response)   # Should recall 'Alice' from semantic memory
 pipeline.save_memory()
 ```
 
-### Run evaluation scenarios (Objectives 5–6)
+### Run evaluation scenarios
 
 ```python
 from dialogue_pipeline import HierarchicalMemoryPipeline
@@ -126,8 +112,7 @@ python test_setup.py
 
 ### Working Memory (`memory/working_memory.py`)
 A deque-based sliding window of the most recent dialogue turns.
-Keeps the last `WORKING_MEMORY_MAX_TURNS` (default 20) turns active in
-context, satisfying the ≥ 10-turn requirement of Objective 1.
+Keeps the last `WORKING_MEMORY_MAX_TURNS` (default 20) turns active in context.
 
 ### Episodic Memory (`memory/episodic_memory.py`)
 Past interaction summaries stored in a FAISS flat L2 index (Johnson et al., 2017).
@@ -151,7 +136,7 @@ Coordinates the three tiers:
 
 ---
 
-## Evaluation Metrics (Objective 6)
+## Evaluation Metrics
 
 | Metric | Description |
 |--------|-------------|
@@ -170,11 +155,11 @@ Key memory parameters:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `WORKING_MEMORY_MAX_TURNS` | 20 | Sliding window size (≥ 10 per Obj. 1) |
+| `WORKING_MEMORY_MAX_TURNS` | 20 | Sliding window size |
 | `EPISODIC_EMBEDDING_MODEL` | `all-MiniLM-L6-v2` | Sentence-transformer for FAISS |
 | `EPISODIC_TOP_K` | 5 | Episodes retrieved per query |
 | `MEMORY_CONSOLIDATION_INTERVAL` | 5 | Working → episodic consolidation frequency |
-| `EVALUATION_NUM_SCENARIOS` | 5 | Evaluation scenarios (≥ 5 per Obj. 5) |
+| `EVALUATION_NUM_SCENARIOS` | 5 | Number of evaluation scenarios |
 
 ---
 

@@ -4,9 +4,6 @@ Episodic Memory module.
 Stores past interaction summaries and retrieves them via FAISS vector
 similarity search (Johnson et al., 2017).  A lightweight sentence-transformer
 (all-MiniLM-L6-v2) provides the embeddings.
-
-Objective 2b: Episodic memory for storing past interactions using vector
-              similarity search.
 """
 
 import json

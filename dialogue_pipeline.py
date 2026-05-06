@@ -5,9 +5,6 @@ Integrates the three-tier memory architecture (working / episodic / semantic)
 with the base Llama 3.1 8B model to produce a dialogue system that maintains
 long-term coherence across sessions.
 
-Objective 4: Integrate the hierarchical memory system into the dialogue pipeline.
-Objective 1: Maintain conversations across at least 10 dialogue turns.
-
 References:
   Lewis et al. (2020) – retrieval-augmented generation pattern.
 """

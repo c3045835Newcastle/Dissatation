@@ -4,8 +4,6 @@ Working Memory module.
 Stores the most recent dialogue turns as a sliding context window.
 Based on Baddeley (1992) working-memory model: a limited-capacity store
 for active, immediately accessible information.
-
-Objective 2a: Working memory for recent conversation context.
 """
 
 from collections import deque
@@ -22,7 +20,6 @@ class WorkingMemory:
 
     Args:
         max_turns (int): Maximum number of dialogue turns to keep in memory.
-                         The proposal requires at least 10 turns (Objective 1).
     """
 
     def __init__(self, max_turns: int = 20):

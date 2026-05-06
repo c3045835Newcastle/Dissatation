@@ -4,9 +4,6 @@ Memory Controller module.
 The memory controller is the coordination layer that decides *what*
 information should be stored in each memory tier and *when* consolidation
 from working memory into episodic / semantic memory should occur.
-
-Objective 3: Develop a memory controller mechanism to determine which
-             information should be stored and consolidated.
 """
 
 import os

@@ -1,10 +1,9 @@
 # Benchmark Results — Base Llama 3.1 8B
 ## Local Deployment on Consumer AMD Hardware
 
-> **Purpose**: This document provides all quantitative data and methodology notes required for the
-> CSC3094 dissertation poster (Project Fair, May 2026). Results cover **only the base (pre-trained)
-> model**; fine-tuned or RLHF variants are left as future work. All figures are reproducible using
-> `benchmark.py` in this repository.
+> **Purpose**: This document provides all quantitative data and methodology notes for the
+> base (pre-trained) Llama 3.1 8B model locally deployed on consumer AMD hardware.
+> All figures are reproducible using `benchmark.py` in this repository.
 
 ---
 
@@ -46,8 +45,7 @@ future multi-model experiments.
 | **Vocabulary** | 128,256 tokens (tiktoken BPE) |
 | **Licence** | Llama 3.1 Community Licence (Meta AI) |
 
-> **Note**: The base model is evaluated here. It is **not** fine-tuned or aligned with RLHF.
-> Instruction-tuned (`-Instruct`) and further fine-tuned variants will be explored as future work.
+> **Note**: The base model is evaluated here. It is **not** instruction-tuned or fine-tuned.
 
 ---
 
@@ -239,45 +237,7 @@ All few-shot settings match those in the original papers (noted in each table).
 
 ---
 
-## 8  Progress to Date
-
-| Milestone | Status |
-|-----------|--------|
-| Repository created and documented | ✅ Complete |
-| Base Llama 3.1 8B model deployed locally (FP16) | ✅ Complete |
-| Quantisation support (INT8, INT4) implemented | ✅ Complete |
-| Interactive inference script (`inference.py`) | ✅ Complete |
-| Benchmarking framework (`benchmark.py`) | ✅ Complete |
-| Hardware performance characterisation (all 3 configs) | ✅ Complete |
-| Standard NLP benchmark evaluation | ✅ Complete |
-| Results data files (`results/`) | ✅ Complete |
-| Fine-tuning / RLHF alignment pipeline | 🔲 Future work |
-| Domain-specific fine-tuning experiments | 🔲 Future work |
-| Instruction-tuned variant evaluation | 🔲 Future work |
-| GGUF / llama.cpp deployment comparison | 🔲 Future work |
-| Dissertation write-up | 🔲 In progress |
-
----
-
-## 9  Future Work
-
-The results above characterise the **base** model as a baseline. The planned next stages are:
-
-1. **Instruction fine-tuning** using supervised fine-tuning (SFT) on a curated instruction
-   dataset, to produce a conversational variant directly comparable to the base model.
-2. **RLHF alignment** (PPO or DPO) to improve TruthfulQA and reduce harmful outputs.
-3. **Domain-specific adaptation**: Fine-tune on a target domain corpus and compare
-   domain-specific benchmarks against the base-model baseline established here.
-4. **Quantisation quality analysis**: Systematic study of the perplexity vs. throughput
-   trade-off across INT8 and INT4, and comparison with GGUF (llama.cpp) quantisation
-   on the same hardware.
-5. **Improved hardware comparison**: Run the full suite on the improved system once the
-   fine-tuned model is ready, providing a like-for-like comparison with the base-model
-   results documented here.
-
----
-
-## 10  References
+## 8  References
 
 1. Dubey, A. et al. (2024). *The Llama 3 Herd of Models*. Meta AI. arXiv:2407.21783.
 2. Touvron, H. et al. (2023). *Llama 2: Open Foundation and Fine-Tuned Chat Models*.

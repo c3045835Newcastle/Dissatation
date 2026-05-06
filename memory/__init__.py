@@ -1,7 +1,7 @@
 """
 Hierarchical Memory Architecture for LLM Dialogue Systems.
 
-Implements the three-tier memory system described in the dissertation proposal:
+Implements a three-tier memory system:
   - Working memory  : recent conversation context (sliding window)
   - Episodic memory : past interactions retrieved via FAISS vector search
   - Semantic memory : persistent user facts stored as structured data
